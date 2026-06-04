@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Mega-Cap IPO Performance · Pre-IPO Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14; --bg2:#0d1117; --panel:#10151d; --panel2:#131a24; --raised:#161d28;
+  --bd:#1e2733; --bd2:#27313f; --bd3:#323e4e;
+  --tx:#d6dde6; --tx2:#9aa7b5; --tx3:#6b7886; --tx4:#4d5867;
+  --spx:#10B981; --ndx:#58A6FF; --dji:#F0B429; --rut:#A78BFA;
+  --up:#10B981; --upbg:#0e2a20; --dn:#F23645; --dnbg:#2b1116;
+  --accent:#58A6FF; --accent2:#A78BFA; --gold:#F0B429;
+  --mono:'JetBrains Mono',ui-monospace,monospace; --sans:'Inter',-apple-system,system-ui,sans-serif;
+  --sh:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+body{background:
+  radial-gradient(1200px 600px at 85% -10%, rgba(88,166,255,.06), transparent 60%),
+  radial-gradient(1000px 500px at 5% 5%, rgba(167,139,250,.05), transparent 55%),
+  var(--bg);
+  min-height:100vh}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1440px;margin:0 auto;padding:0 28px 80px}
+@media(min-width:1600px){.wrap{max-width:1560px}}
+a{color:var(--accent);text-decoration:none}
+button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:none}
+::selection{background:rgba(88,166,255,.3)}
+
+/* ---------- LOCK ---------- */
+#lock{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
+  background:
+   radial-gradient(900px 600px at 70% 20%, rgba(88,166,255,.14), transparent 60%),
+   radial-gradient(800px 600px at 20% 80%, rgba(167,139,250,.12), transparent 60%),
+   linear-gradient(160deg,#070a0f 0%,#0c1119 55%,#0a0e14 100%)}
+.lockcard{width:380px;max-width:90vw;background:linear-gradient(180deg,rgba(22,29,40,.9),rgba(13,17,23,.92));
+  border:1px solid var(--bd2);border-radius:16px;padding:34px 30px;box-shadow:0 30px 80px rgba(0,0,0,.6);backdrop-filter:blur(8px)}
+.lockcard .glyph{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101f;font-weight:800;font-size:20px;margin-bottom:18px;box-shadow:0 6px 20px rgba(88,166,255,.35)}
+.lockcard h1{font-size:16px;font-weight:700;letter-spacing:.2px}
+.lockcard p{color:var(--tx3);font-size:12px;margin:6px 0 22px}
+.lockcard input{width:100%;background:#0a0e14;border:1px solid var(--bd2);border-radius:9px;padding:12px 14px;color:var(--tx);font-family:var(--mono);font-size:15px;letter-spacing:3px;text-align:center;transition:.15s}
+.lockcard input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(88,166,255,.15)}
+.lockcard button{width:100%;margin-top:14px;background:linear-gradient(135deg,var(--accent),#3b82f6);color:#06101f;font-weight:700;padding:12px;border-radius:9px;font-size:13px;letter-spacing:.4px;transition:.15s}
+.lockcard button:hover{filter:brightness(1.08)}
+.lockerr{color:var(--dn);font-size:11.5px;margin-top:12px;text-align:center;min-height:14px;font-family:var(--mono)}
+
+/* ---------- HEADER ---------- */
+header{padding:30px 0 18px;border-bottom:1px solid var(--bd);margin-bottom:22px}
+.htop{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.brand{display:flex;gap:14px;align-items:center}
+.brand .mk{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#06101f;font-weight:800;font-size:18px;box-shadow:0 4px 16px rgba(88,166,255,.3)}
+h1.title{font-size:21px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
+.sub{color:var(--tx3);font-size:12px;margin-top:3px;font-weight:500}
+.hmeta{display:flex;gap:8px;align-items:center}
+.pill{font-size:11px;color:var(--tx2);background:var(--panel);border:1px solid var(--bd2);border-radius:20px;padding:6px 12px;font-family:var(--mono)}
+.pill b{color:var(--tx);font-weight:600}
+.langtog{display:flex;border:1px solid var(--bd2);border-radius:8px;overflow:hidden}
+.langtog button{padding:6px 12px;font-size:11.5px;font-weight:600;color:var(--tx3)}
+.langtog button.on{background:var(--accent);color:#06101f}
+.btn-note{font-size:11.5px;color:var(--tx2);border:1px solid var(--bd2);border-radius:8px;padding:6px 12px;transition:.15s}
+.btn-note:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---------- PRECEDENT CALLOUT ---------- */
+.callout{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+  background:linear-gradient(100deg,rgba(240,180,41,.07),rgba(13,17,23,.4));
+  border:1px solid rgba(240,180,41,.28);border-left:3px solid var(--gold);border-radius:12px;padding:16px 20px;margin-bottom:22px}
+.callout .ico{width:30px;height:30px;border-radius:8px;background:rgba(240,180,41,.16);display:flex;align-items:center;justify-content:center;font-size:16px}
+.callout h3{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:4px;letter-spacing:.2px}
+.callout p{font-size:12.5px;color:var(--tx2);line-height:1.55;max-width:1100px}
+.callout b{color:var(--tx)}
+
+/* ---------- KPI ---------- */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--bd);border-radius:12px;padding:14px 15px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);opacity:.5}
+.kpi.g::after{background:var(--up)} .kpi.r::after{background:var(--dn)} .kpi.a::after{background:var(--gold)} .kpi.p::after{background:var(--accent2)}
+.kpi .l{font-size:10.5px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-bottom:7px;min-height:26px}
+.kpi .v{font-family:var(--mono);font-size:25px;font-weight:700;letter-spacing:-.5px;line-height:1}
+.kpi .x{font-size:10.5px;color:var(--tx3);margin-top:5px;font-family:var(--mono)}
+.pos{color:var(--up)} .neg{color:var(--dn)}
+
+/* ---------- CONTROLS ---------- */
+.controls{position:sticky;top:0;z-index:40;background:rgba(10,14,20,.86);backdrop-filter:blur(10px);
+  border:1px solid var(--bd);border-radius:12px;padding:13px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:11px}
+.crow{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.cgroup{display:flex;align-items:center;gap:9px}
+.clabel{font-size:10.5px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.seg{display:flex;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;padding:2px}
+.seg button{padding:6px 13px;font-size:12px;font-weight:600;color:var(--tx3);border-radius:6px;transition:.12s;white-space:nowrap}
+.seg button.on{background:var(--accent);color:#06101f}
+.seg.alt button.on{background:var(--accent2);color:#0a0a14}
+.divider{width:1px;height:24px;background:var(--bd2)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{font-size:11.5px;color:var(--tx2);background:var(--bg2);border:1px solid var(--bd2);border-radius:7px;padding:5px 11px;transition:.12s;font-weight:500}
+.chip:hover{border-color:var(--bd3);color:var(--tx)}
+.chip.on{background:rgba(88,166,255,.16);border-color:var(--accent);color:#cfe3ff}
+.fselect{background:var(--bg2);border:1px solid var(--bd2);border-radius:7px;color:var(--tx2);padding:6px 9px;font-size:12px;font-family:var(--sans)}
+.fselect:focus{outline:none;border-color:var(--accent)}
+.cspacer{flex:1}
+.btn-exp{font-size:11.5px;color:var(--tx2);border:1px solid var(--bd2);border-radius:8px;padding:7px 13px;font-weight:600;transition:.15s;display:flex;gap:6px;align-items:center}
+.btn-exp:hover{border-color:var(--up);color:var(--up)}
+
+/* ---------- PANELS / GRID ---------- */
+.grid3{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:16px;margin-bottom:18px}
+@media(max-width:1100px){.grid3{grid-template-columns:1fr}}
+.panel{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--bd);border-radius:13px;padding:16px 18px}
+.panel h2{font-size:13px;font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.panel h2 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.panel .ph{color:var(--tx3);font-size:11px;margin-bottom:14px;font-weight:500}
+
+/* heatmap */
+.hm{width:100%;border-collapse:separate;border-spacing:3px}
+.hm th{font-size:10px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:4px 2px;text-align:center}
+.hm th.yr,.hm td.yr{text-align:left;font-family:var(--mono);font-weight:600;color:var(--tx2);font-size:12px;padding-left:4px}
+.hm td{font-family:var(--mono);font-size:12px;font-weight:600;text-align:center;padding:7px 4px;border-radius:6px;color:var(--tx);position:relative;cursor:default}
+.hm td .n{display:block;font-size:8.5px;color:var(--tx4);font-weight:500;margin-top:1px}
+.hm td.na{color:var(--tx4);background:rgba(255,255,255,.02)!important}
+
+/* bars */
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar{display:grid;grid-template-columns:96px 1fr 52px;align-items:center;gap:8px;font-size:11.5px}
+.bar .bl{color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.bar .bt{height:18px;background:var(--bg);border-radius:4px;position:relative;overflow:hidden}
+.bar .bf{position:absolute;top:0;bottom:0;border-radius:4px}
+.bar .bf.pos{background:linear-gradient(90deg,rgba(16,185,129,.5),var(--up));left:50%}
+.bar .bf.neg{background:linear-gradient(90deg,var(--dn),rgba(242,54,69,.5));right:50%}
+.bar .bv{font-family:var(--mono);font-weight:600;text-align:right;font-size:11.5px}
+.bzero{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--bd3)}
+.bar .bn{font-size:9px;color:var(--tx4)}
+
+/* scatter */
+.scatterwrap{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--bd);border-radius:13px;padding:16px 18px;margin-bottom:18px}
+.scflex{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+#scatter{width:100%;height:360px;display:block}
+.scleg{display:flex;gap:13px;flex-wrap:wrap;font-size:11px;color:var(--tx3);margin-top:8px;align-items:center}
+.scleg .li{display:flex;gap:5px;align-items:center}
+.scleg .sw{width:9px;height:9px;border-radius:50%}
+.sctip{position:fixed;pointer-events:none;background:rgba(8,12,18,.97);border:1px solid var(--bd3);border-radius:8px;padding:8px 11px;font-size:11.5px;z-index:60;box-shadow:var(--sh);display:none;max-width:220px}
+.sctip .t{font-weight:700;font-size:12.5px;margin-bottom:3px}
+.sctip .r{font-family:var(--mono);color:var(--tx2);font-size:11px}
+
+/* ---------- TABLE ---------- */
+.tablecard{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--bd);border-radius:13px;overflow:hidden}
+.thead{display:flex;justify-content:space-between;align-items:center;padding:15px 18px;border-bottom:1px solid var(--bd)}
+.thead h2{font-size:13px;font-weight:700;display:flex;gap:8px;align-items:center}
+.thead h2 .dot{width:7px;height:7px;border-radius:50%;background:var(--up)}
+.tcount{font-size:11px;color:var(--tx3);font-family:var(--mono)}
+.tscroll{overflow-x:auto;max-height:760px;overflow-y:auto}
+table.dt{width:100%;border-collapse:collapse;font-size:12.5px;white-space:nowrap}
+table.dt thead th{position:sticky;top:0;z-index:5;background:#0c1119;color:var(--tx3);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:10px 10px;text-align:right;border-bottom:1px solid var(--bd2);cursor:pointer;user-select:none;transition:.12s}
+table.dt thead th:hover{color:var(--tx)}
+table.dt thead th.l{text-align:left}
+table.dt thead th .ar{color:var(--accent);font-size:9px;margin-left:2px}
+table.dt tbody td{padding:8px 10px;text-align:right;border-bottom:1px solid rgba(30,39,51,.6);font-family:var(--mono);font-variant-numeric:tabular-nums}
+table.dt tbody td.l{text-align:left;font-family:var(--sans)}
+table.dt tbody tr{transition:.1s;cursor:pointer}
+table.dt tbody tr:hover{background:rgba(88,166,255,.06)}
+.tk{font-weight:700;font-family:var(--mono);color:var(--tx)}
+.nm{color:var(--tx2);font-size:11.5px;font-weight:500;max-width:150px;overflow:hidden;text-overflow:ellipsis;display:inline-block;vertical-align:bottom}
+.star{color:var(--gold);font-size:9px;margin-left:3px;vertical-align:top}
+.tag{font-size:9.5px;padding:2px 6px;border-radius:5px;font-weight:600;font-family:var(--sans);letter-spacing:.2px}
+.tag.ipo{background:rgba(88,166,255,.12);color:#9cd1ff}
+.tag.dir{background:rgba(167,139,250,.14);color:#c8b6ff}
+.tag.del{background:rgba(242,54,69,.13);color:#ff8a96}
+.tag.acq{background:rgba(240,180,41,.13);color:#f3cd6f}
+.sec{font-size:10.5px;color:var(--tx3)}
+.cell{border-radius:5px;font-weight:600}
+td.muted{color:var(--tx4)}
+
+/* tier colors */
+.p1{color:#5fd0a8} .p2{color:#36c692;background:rgba(16,185,129,.08)} .p3{color:#26c187;background:rgba(16,185,129,.15)} .p4{color:#0b1a14;background:var(--up);font-weight:700}
+.n1{color:#ff8089} .n2{color:#ff5a67;background:rgba(242,54,69,.08)} .n3{color:#ff4150;background:rgba(242,54,69,.16)} .n4{color:#fff;background:var(--dn);font-weight:700}
+.z0{color:var(--tx4)}
+
+/* ---------- MODALS ---------- */
+.ov{position:fixed;inset:0;background:rgba(4,7,11,.72);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+.ov.show{display:flex}
+.modal{width:680px;max-width:96vw;max-height:90vh;overflow-y:auto;background:linear-gradient(180deg,var(--raised),var(--bg2));border:1px solid var(--bd3);border-radius:16px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.mhead{display:flex;justify-content:space-between;align-items:flex-start;padding:20px 22px;border-bottom:1px solid var(--bd2);position:sticky;top:0;background:linear-gradient(180deg,var(--raised),rgba(22,29,40,.96));z-index:2}
+.mhead .x{font-size:22px;color:var(--tx3);line-height:1;padding:0 4px}
+.mhead .x:hover{color:var(--tx)}
+.mtitle{display:flex;gap:11px;align-items:center}
+.mtitle .tk2{font-family:var(--mono);font-size:20px;font-weight:800}
+.mtitle .nm2{color:var(--tx2);font-size:13px}
+.mbody{padding:20px 22px}
+.mmeta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.mstat{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.mstat .s{background:var(--bg2);border:1px solid var(--bd);border-radius:9px;padding:11px}
+.mstat .s .l{font-size:9.5px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:5px}
+.mstat .s .v{font-family:var(--mono);font-size:17px;font-weight:700}
+.mtab{width:100%;border-collapse:separate;border-spacing:0 0;font-size:12px;margin-top:6px}
+.mtab th{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;font-weight:600;padding:7px 8px;text-align:right;border-bottom:1px solid var(--bd2)}
+.mtab th.l{text-align:left}
+.mtab td{font-family:var(--mono);font-size:12px;font-weight:600;padding:8px 8px;text-align:right;border-bottom:1px solid rgba(30,39,51,.5)}
+.mtab td.l{text-align:left;font-family:var(--sans);color:var(--tx2)}
+.msec h4{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin:18px 0 8px}
+.notes{font-size:12px;color:var(--tx2);line-height:1.6}
+.notes p{margin-bottom:11px}
+.notes b{color:var(--tx)}
+.notes ul{margin:0 0 11px 18px} .notes li{margin-bottom:6px}
+.notes code{font-family:var(--mono);background:var(--bg2);padding:1px 5px;border-radius:4px;font-size:11px;color:#cfe3ff}
+
+footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--bd);color:var(--tx4);font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+footer .dis{max-width:760px;line-height:1.5}
+.scrollhint{font-size:10px;color:var(--tx4);padding:6px 18px;border-top:1px solid var(--bd)}
+</style>
+</head>
+<body>
+<!-- LOCK -->
+<div id="lock">
+  <div class="lockcard">
+    <div class="glyph">◆</div>
+    <h1 id="lk-h">IPO Performance Terminal</h1>
+    <p id="lk-p">Protected research dashboard. Enter access code to continue.</p>
+    <input id="pw" type="password" inputmode="numeric" autocomplete="off" placeholder="• • • • • • • •" maxlength="32">
+    <button id="pwbtn">Unlock</button>
+    <div class="lockerr" id="lkerr"></div>
+  </div>
+</div>
+
+<div id="app" hidden>
+<div class="wrap">
+  <header>
+    <div class="htop">
+      <div class="brand">
+        <div class="mk">◆</div>
+        <div>
+          <h1 class="title" id="t-title">US Mega-Cap IPO Performance</h1>
+          <div class="sub" id="t-sub">5-Year Lookback · Pre-IPO research for SpaceX · Anthropic · OpenAI</div>
+        </div>
+      </div>
+      <div class="hmeta">
+        <span class="pill" id="t-asof">As of —</span>
+        <span class="pill" id="t-n">— IPOs</span>
+        <button class="btn-note" id="t-method">≡ <span id="t-methodlbl">Methodology</span></button>
+        <div class="langtog">
+          <button id="lang-en" class="on">EN</button>
+          <button id="lang-tc">繁中</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="callout">
+    <div class="ico">⚠</div>
+    <div>
+      <h3 id="c-h">The precedent gap</h3>
+      <p id="c-p"></p>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="crow">
+      <div class="cgroup">
+        <span class="clabel" id="cl-base">Baseline</span>
+        <div class="seg" id="seg-base">
+          <button data-v="off" class="on" id="sb-off">From Offer</button>
+          <button data-v="fdc" id="sb-fdc">From 1st-Day Close</button>
+        </div>
+      </div>
+      <div class="cgroup">
+        <span class="clabel" id="cl-metric">Metric</span>
+        <div class="seg alt" id="seg-metric">
+          <button data-v="raw" class="on" id="sm-raw">Raw</button>
+          <button data-v="spx" id="sm-spx">Excess vs SPX</button>
+          <button data-v="ndx" id="sm-ndx">Excess vs NDX</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="cgroup">
+        <span class="clabel" id="cl-hz">Chart horizon</span>
+        <div class="seg" id="seg-hz">
+          <button data-v="w1" id="sh-w1">1W</button>
+          <button data-v="m1" id="sh-m1">1M</button>
+          <button data-v="m3" id="sh-m3">3M</button>
+          <button data-v="m6" id="sh-m6">6M</button>
+          <button data-v="y1" class="on" id="sh-y1">1Y</button>
+        </div>
+      </div>
+      <div class="cspacer"></div>
+      <button class="btn-exp" id="btn-csv">↓ <span id="t-csv">Export CSV</span></button>
+    </div>
+    <div class="crow">
+      <div class="cgroup">
+        <span class="clabel" id="cl-vintage">Vintage</span>
+        <div class="chips" id="chips-year"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="cgroup">
+        <span class="clabel" id="cl-tier">Tier</span>
+        <div class="chips" id="chips-tier"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="cgroup">
+        <span class="clabel" id="cl-sector">Sector</span>
+        <select class="fselect" id="sel-sector"></select>
+      </div>
+      <div class="cgroup">
+        <span class="clabel" id="cl-size">Size</span>
+        <select class="fselect" id="sel-bucket"></select>
+      </div>
+      <div class="cgroup">
+        <span class="clabel" id="cl-struct">Structure</span>
+        <select class="fselect" id="sel-struct"></select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANALYTICS GRID -->
+  <div class="grid3">
+    <div class="panel">
+      <h2><span class="dot"></span><span id="p-cohort">Cohort medians by vintage</span></h2>
+      <div class="ph" id="p-cohort-h">Median return per IPO class — the core signal</div>
+      <table class="hm" id="heatmap"></table>
+    </div>
+    <div class="panel">
+      <h2><span class="dot" style="background:var(--accent2)"></span><span id="p-sector">By sector</span></h2>
+      <div class="ph" id="p-sector-h">Median at selected horizon</div>
+      <div class="bars" id="bars-sector"></div>
+    </div>
+    <div class="panel">
+      <h2><span class="dot" style="background:var(--gold)"></span><span id="p-bucket">By IPO size</span></h2>
+      <div class="ph" id="p-bucket-h">Does scale protect you?</div>
+      <div class="bars" id="bars-bucket"></div>
+    </div>
+  </div>
+
+  <!-- SCATTER -->
+  <div class="scatterwrap">
+    <div class="scflex">
+      <div>
+        <h2 style="font-size:13px;font-weight:700;display:flex;gap:8px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block"></span><span id="p-scatter">Day-1 pop vs forward return</span></h2>
+        <div class="ph" id="p-scatter-h" style="color:var(--tx3);font-size:11px;margin-top:3px">Does the first-day pop predict the fade?</div>
+      </div>
+    </div>
+    <svg id="scatter" viewBox="0 0 1100 360" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="scleg" id="scleg"></div>
+  </div>
+  <div class="sctip" id="sctip"></div>
+
+  <!-- TABLE -->
+  <div class="tablecard">
+    <div class="thead">
+      <h2><span class="dot"></span><span id="p-table">All IPOs</span></h2>
+      <span class="tcount" id="tcount"></span>
+    </div>
+    <div class="tscroll">
+      <table class="dt" id="dt"><thead id="dthead"></thead><tbody id="dtbody"></tbody></table>
+    </div>
+    <div class="scrollhint" id="t-hint">↔ scroll for all horizons · click any row for full detail</div>
+  </div>
+
+  <footer>
+    <div class="dis" id="t-disc"></div>
+    <div id="t-foot"></div>
+  </footer>
+</div>
+</div>
+
+<!-- COMPANY MODAL -->
+<div class="ov" id="ov1"><div class="modal" id="m1"></div></div>
+<!-- METHODOLOGY MODAL -->
+<div class="ov" id="ov2"><div class="modal" id="m2"></div></div>
+<script>
+const DATA = {"generated": "2026-06-04T23:15:07.421998Z", "asof": "2026-06-04", "n": 67, "missing": [], "spx_last": 7584.31, "ndx_last": 30407.81, "rows": [{"ticker": "LYFT", "name": "Lyft", "date": "2019-03-29", "year": 2019, "sector": "Mobility", "structure": "IPO", "region": "US", "capB": 24, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 72.0, "fdc": 78.29, "pop": 8.74, "prices": {"w1": 74.45, "m1": 57.24, "m3": 65.71, "m6": 41.35, "y1": 27.6}, "ret_off": {"w1": 3.4, "m1": -20.5, "m3": -8.74, "m6": -42.57, "y1": -61.67}, "ret_fdc": {"w1": -4.9, "m1": -26.89, "m3": -16.07, "m6": -47.18, "y1": -64.75}, "exc_spx_f": {"w1": -6.96, "m1": -30.61, "m3": -19.86, "m6": -51.67, "y1": -54.42}, "exc_ndx_f": {"w1": -7.61, "m1": -32.96, "m3": -20.03, "m6": -51.28, "y1": -67.59}, "exc_spx_o": {"w1": 1.34, "m1": -24.22, "m3": -12.53, "m6": -47.06, "y1": -51.34}, "exc_ndx_o": {"w1": 0.69, "m1": -26.57, "m3": -12.7, "m6": -46.67, "y1": -64.51}, "last": 14.12, "life_off": -80.39, "life_fdc": -81.96, "days": 2624}, {"ticker": "PINS", "name": "Pinterest", "date": "2019-04-18", "year": 2019, "sector": "Internet/Consumer", "structure": "IPO", "region": "US", "capB": 13, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 19.0, "fdc": 24.4, "pop": 28.42, "prices": {"w1": 28.8, "m1": 26.7, "m3": 25.78, "m6": 25.99, "y1": 17.45}, "ret_off": {"w1": 51.58, "m1": 40.53, "m3": 35.68, "m6": 36.79, "y1": -8.16}, "ret_fdc": {"w1": 18.03, "m1": 9.43, "m3": 5.66, "m6": 6.52, "y1": -28.48}, "exc_spx_f": {"w1": 17.3, "m1": 11.0, "m3": 2.56, "m6": 3.32, "y1": -27.43}, "exc_ndx_f": {"w1": 16.38, "m1": 11.85, "m3": 2.87, "m6": 3.24, "y1": -43.34}, "exc_spx_o": {"w1": 50.85, "m1": 42.1, "m3": 32.58, "m6": 33.59, "y1": -7.11}, "exc_ndx_o": {"w1": 49.93, "m1": 42.95, "m3": 32.89, "m6": 33.51, "y1": -23.02}, "last": 21.59, "life_off": 13.63, "life_fdc": -11.52, "days": 2604}, {"ticker": "ZM", "name": "Zoom", "date": "2019-04-18", "year": 2019, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 9.2, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 36.0, "fdc": 62.0, "pop": 72.22, "prices": {"w1": 65.0, "m1": 89.98, "m3": 95.19, "m6": 67.03, "y1": 150.06}, "ret_off": {"w1": 80.56, "m1": 149.94, "m3": 164.42, "m6": 86.19, "y1": 316.83}, "ret_fdc": {"w1": 4.84, "m1": 45.13, "m3": 53.53, "m6": 8.11, "y1": 142.03}, "exc_spx_f": {"w1": 4.11, "m1": 46.7, "m3": 50.43, "m6": 4.91, "y1": 143.08}, "exc_ndx_f": {"w1": 3.19, "m1": 47.55, "m3": 50.74, "m6": 4.83, "y1": 127.17}, "exc_spx_o": {"w1": 79.83, "m1": 151.51, "m3": 161.32, "m6": 82.99, "y1": 317.88}, "exc_ndx_o": {"w1": 78.91, "m1": 152.36, "m3": 161.63, "m6": 82.91, "y1": 301.97}, "last": 105.21, "life_off": 192.25, "life_fdc": 69.69, "days": 2604}, {"ticker": "UBER", "name": "Uber", "date": "2019-05-10", "year": 2019, "sector": "Mobility", "structure": "IPO", "region": "US", "capB": 75, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 45.0, "fdc": 41.57, "pop": -7.62, "prices": {"w1": 41.91, "m1": 44.16, "m3": 40.05, "m6": 27.01, "y1": 32.79}, "ret_off": {"w1": -6.87, "m1": -1.87, "m3": -11.0, "m6": -39.98, "y1": -27.13}, "ret_fdc": {"w1": 0.82, "m1": 6.23, "m3": -3.66, "m6": -35.03, "y1": -21.12}, "exc_spx_f": {"w1": 1.58, "m1": 6.51, "m3": -4.95, "m6": -42.38, "y1": -22.8}, "exc_ndx_f": {"w1": 1.91, "m1": 8.46, "m3": -4.45, "m6": -43.85, "y1": -42.66}, "exc_spx_o": {"w1": -6.11, "m1": -1.59, "m3": -12.29, "m6": -47.33, "y1": -28.81}, "exc_ndx_o": {"w1": -5.78, "m1": 0.36, "m3": -11.79, "m6": -48.8, "y1": -48.67}, "last": 72.21, "life_off": 60.47, "life_fdc": 73.71, "days": 2582}, {"ticker": "CRWD", "name": "CrowdStrike", "date": "2019-06-12", "year": 2019, "sector": "Cybersecurity", "structure": "IPO", "region": "US", "capB": 6.7, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 34.0, "fdc": 58.0, "pop": 70.59, "prices": {"w1": 77.22, "m1": 73.5, "m3": 69.11, "m6": 47.73, "y1": 95.04}, "ret_off": {"w1": 127.12, "m1": 116.18, "m3": 103.26, "m6": 40.38, "y1": 179.53}, "ret_fdc": {"w1": 33.14, "m1": 26.72, "m3": 19.16, "m6": -17.71, "y1": 63.86}, "exc_spx_f": {"w1": 31.52, "m1": 22.07, "m3": 14.96, "m6": -26.8, "y1": 59.61}, "exc_ndx_f": {"w1": 30.52, "m1": 20.42, "m3": 13.6, "m6": -30.16, "y1": 35.54}, "exc_spx_o": {"w1": 125.5, "m1": 111.53, "m3": 99.06, "m6": 31.29, "y1": 175.28}, "exc_ndx_o": {"w1": 124.5, "m1": 109.88, "m3": 97.7, "m6": 27.93, "y1": 151.21}, "last": 719.09, "life_off": 2014.97, "life_fdc": 1139.81, "days": 2549}, {"ticker": "NET", "name": "Cloudflare", "date": "2019-09-13", "year": 2019, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 4.4, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 15.0, "fdc": 18.0, "pop": 20.0, "prices": {"w1": 19.87, "m1": 16.47, "m3": 17.95, "m6": 19.06, "y1": 34.17}, "ret_off": {"w1": 32.47, "m1": 9.8, "m3": 19.67, "m6": 27.07, "y1": 127.8}, "ret_fdc": {"w1": 10.39, "m1": -8.5, "m3": -0.28, "m6": 5.89, "y1": 89.83}, "exc_spx_f": {"w1": 10.9, "m1": -7.27, "m3": -5.65, "m6": 15.74, "y1": 78.74}, "exc_ndx_f": {"w1": 11.27, "m1": -7.88, "m3": -7.82, "m6": 4.59, "y1": 49.36}, "exc_spx_o": {"w1": 32.98, "m1": 11.03, "m3": 14.3, "m6": 36.92, "y1": 116.71}, "exc_ndx_o": {"w1": 33.35, "m1": 10.42, "m3": 12.13, "m6": 25.77, "y1": 87.33}, "last": 268.64, "life_off": 1690.93, "life_fdc": 1392.44, "days": 2456}, {"ticker": "DDOG", "name": "Datadog", "date": "2019-09-19", "year": 2019, "sector": "Data/Analytics", "structure": "IPO", "region": "US", "capB": 7.8, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 27.0, "fdc": 37.55, "pop": 39.07, "prices": {"w1": 32.44, "m1": 31.57, "m3": 38.1, "m6": 33.1, "y1": 85.69}, "ret_off": {"w1": 20.15, "m1": 16.93, "m3": 41.11, "m6": 22.59, "y1": 217.37}, "ret_fdc": {"w1": -13.61, "m1": -15.93, "m3": 1.46, "m6": -11.85, "y1": 128.2}, "exc_spx_f": {"w1": -12.64, "m1": -15.25, "m3": -5.14, "m6": 8.02, "y1": 117.8}, "exc_ndx_f": {"w1": -11.97, "m1": -15.51, "m3": -7.9, "m6": -4.09, "y1": 89.79}, "exc_spx_o": {"w1": 21.12, "m1": 17.61, "m3": 34.51, "m6": 42.46, "y1": 206.97}, "exc_ndx_o": {"w1": 21.79, "m1": 17.35, "m3": 31.75, "m6": 30.35, "y1": 178.96}, "last": 243.6, "life_off": 802.22, "life_fdc": 548.74, "days": 2450}, {"ticker": "PTON", "name": "Peloton", "date": "2019-09-26", "year": 2019, "sector": "Internet/Consumer", "structure": "IPO", "region": "US", "capB": 8.1, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 29.0, "fdc": 25.76, "pop": -11.17, "prices": {"w1": 22.33, "m1": 22.4, "m3": 27.0, "m6": 25.75, "y1": 97.73}, "ret_off": {"w1": -23.0, "m1": -22.76, "m3": -6.9, "m6": -11.21, "y1": 237.0}, "ret_fdc": {"w1": -13.32, "m1": -13.04, "m3": 4.81, "m6": -0.04, "y1": 279.39}, "exc_spx_f": {"w1": -11.07, "m1": -14.55, "m3": -4.0, "m6": 11.63, "y1": 268.61}, "exc_ndx_f": {"w1": -11.6, "m1": -16.35, "m3": -8.14, "m6": -1.65, "y1": 235.91}, "exc_spx_o": {"w1": -20.75, "m1": -24.27, "m3": -15.71, "m6": 0.46, "y1": 226.22}, "exc_ndx_o": {"w1": -21.28, "m1": -26.07, "m3": -19.85, "m6": -12.82, "y1": 193.52}, "last": 6.17, "life_off": -78.72, "life_fdc": -76.05, "days": 2443}, {"ticker": "LMND", "name": "Lemonade", "date": "2020-07-02", "year": 2020, "sector": "Fintech", "structure": "IPO", "region": "US", "capB": 1.6, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 29.0, "fdc": 69.41, "pop": 139.34, "prices": {"w1": 77.01, "m1": 58.18, "m3": 51.46, "m6": 122.5, "y1": 107.65}, "ret_off": {"w1": 165.55, "m1": 100.62, "m3": 77.45, "m6": 322.41, "y1": 271.21}, "ret_fdc": {"w1": 10.95, "m1": -16.18, "m3": -25.86, "m6": 76.49, "y1": 55.09}, "exc_spx_f": {"w1": 10.25, "m1": -20.69, "m3": -33.87, "m6": 56.49, "y1": 16.04}, "exc_ndx_f": {"w1": 6.96, "m1": -21.63, "m3": -37.86, "m6": 51.87, "y1": 12.68}, "exc_spx_o": {"w1": 164.85, "m1": 96.11, "m3": 69.44, "m6": 302.41, "y1": 232.16}, "exc_ndx_o": {"w1": 161.56, "m1": 95.17, "m3": 65.45, "m6": 297.79, "y1": 228.8}, "last": 51.57, "life_off": 77.83, "life_fdc": -25.7, "days": 2163}, {"ticker": "SNOW", "name": "Snowflake", "date": "2020-09-16", "year": 2020, "sector": "Data/Analytics", "structure": "IPO", "region": "US", "capB": 33, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 120.0, "fdc": 253.93, "pop": 111.61, "prices": {"w1": 217.39, "m1": 242.52, "m3": 329.97, "m6": 230.3, "y1": 323.52}, "ret_off": {"w1": 81.16, "m1": 102.1, "m3": 174.98, "m6": 91.92, "y1": 169.6}, "ret_fdc": {"w1": -14.39, "m1": -4.49, "m3": 29.95, "m6": -9.31, "y1": 27.41}, "exc_spx_f": {"w1": -10.0, "m1": -7.39, "m3": 20.63, "m6": -26.7, "y1": -4.73}, "exc_ndx_f": {"w1": -10.71, "m1": -9.87, "m3": 17.32, "m6": -26.69, "y1": -10.54}, "exc_spx_o": {"w1": 85.55, "m1": 99.2, "m3": 165.66, "m6": 74.53, "y1": 137.46}, "exc_ndx_o": {"w1": 84.84, "m1": 96.72, "m3": 162.35, "m6": 74.54, "y1": 131.65}, "last": 244.18, "life_off": 103.48, "life_fdc": -3.84, "days": 2087}, {"ticker": "FROG", "name": "JFrog", "date": "2020-09-16", "year": 2020, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 4, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 44.0, "fdc": 64.79, "pop": 47.25, "prices": {"w1": 75.5, "m1": 80.18, "m3": 63.2, "m6": 47.55, "y1": 36.01}, "ret_off": {"w1": 71.59, "m1": 82.23, "m3": 43.64, "m6": 8.07, "y1": -18.16}, "ret_fdc": {"w1": 16.53, "m1": 23.75, "m3": -2.45, "m6": -26.61, "y1": -44.42}, "exc_spx_f": {"w1": 20.92, "m1": 20.85, "m3": -11.77, "m6": -44.0, "y1": -76.56}, "exc_ndx_f": {"w1": 20.21, "m1": 18.37, "m3": -15.08, "m6": -43.99, "y1": -82.37}, "exc_spx_o": {"w1": 75.98, "m1": 79.33, "m3": 34.32, "m6": -9.32, "y1": -50.3}, "exc_ndx_o": {"w1": 75.27, "m1": 76.85, "m3": 31.01, "m6": -9.31, "y1": -56.11}, "last": 86.16, "life_off": 95.82, "life_fdc": 32.98, "days": 2087}, {"ticker": "U", "name": "Unity", "date": "2020-09-18", "year": 2020, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 13.7, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 52.0, "fdc": 68.35, "pop": 31.44, "prices": {"w1": 89.85, "m1": 92.56, "m3": 157.77, "m6": 100.53, "y1": 136.69}, "ret_off": {"w1": 72.79, "m1": 78.0, "m3": 203.4, "m6": 93.33, "y1": 162.87}, "ret_fdc": {"w1": 31.46, "m1": 35.42, "m3": 130.83, "m6": 47.08, "y1": 99.99}, "exc_spx_f": {"w1": 32.09, "m1": 30.47, "m3": 119.08, "m6": 29.2, "y1": 66.44}, "exc_ndx_f": {"w1": 29.5, "m1": 27.05, "m3": 114.36, "m6": 29.43, "y1": 59.79}, "exc_spx_o": {"w1": 73.42, "m1": 73.05, "m3": 191.65, "m6": 75.45, "y1": 129.32}, "exc_ndx_o": {"w1": 70.83, "m1": 69.63, "m3": 186.93, "m6": 75.68, "y1": 122.67}, "last": 30.03, "life_off": -42.25, "life_fdc": -56.06, "days": 2085}, {"ticker": "GDRX", "name": "GoodRx", "date": "2020-09-23", "year": 2020, "sector": "Healthcare", "structure": "IPO", "region": "US", "capB": 12.7, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 33.0, "fdc": 50.5, "pop": 53.03, "prices": {"w1": 55.6, "m1": 52.5, "m3": 47.59, "m6": 35.03, "y1": 46.33}, "ret_off": {"w1": 68.48, "m1": 59.09, "m3": 44.21, "m6": 6.15, "y1": 40.39}, "ret_fdc": {"w1": 10.1, "m1": 3.96, "m3": -5.76, "m6": -30.63, "y1": -8.26}, "exc_spx_f": {"w1": 6.2, "m1": -3.1, "m3": -19.76, "m6": -50.78, "y1": -45.7}, "exc_ndx_f": {"w1": 4.7, "m1": -3.97, "m3": -22.56, "m6": -48.77, "y1": -49.64}, "exc_spx_o": {"w1": 64.58, "m1": 52.03, "m3": 30.21, "m6": -14.0, "y1": 2.95}, "exc_ndx_o": {"w1": 63.08, "m1": 51.16, "m3": 27.41, "m6": -11.99, "y1": -0.99}, "last": 2.85, "life_off": -91.36, "life_fdc": -94.36, "days": 2080}, {"ticker": "ASAN", "name": "Asana", "date": "2020-09-30", "year": 2020, "sector": "Software/SaaS", "structure": "Direct", "region": "US", "capB": 4, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 21.0, "fdc": 28.8, "pop": 37.14, "prices": {"w1": 26.48, "m1": 22.11, "m3": 29.12, "m6": 28.58, "y1": 103.84}, "ret_off": {"w1": 26.1, "m1": 5.29, "m3": 38.67, "m6": 36.1, "y1": 394.48}, "ret_fdc": {"w1": -8.06, "m1": -23.23, "m3": 1.11, "m6": -0.76, "y1": 260.56}, "exc_spx_f": {"w1": -9.74, "m1": -20.46, "m3": -9.86, "m6": -18.9, "y1": 232.47}, "exc_ndx_f": {"w1": -8.81, "m1": -20.03, "m3": -11.39, "m6": -15.42, "y1": 231.91}, "exc_spx_o": {"w1": 24.42, "m1": 8.06, "m3": 27.7, "m6": 17.96, "y1": 366.39}, "exc_ndx_o": {"w1": 25.35, "m1": 8.49, "m3": 26.17, "m6": 21.44, "y1": 365.83}, "last": 8.07, "life_off": -61.57, "life_fdc": -71.98, "days": 2073}, {"ticker": "PLTR", "name": "Palantir", "date": "2020-09-30", "year": 2020, "sector": "AI/ML", "structure": "Direct", "region": "US", "capB": 16, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 7.25, "fdc": 9.5, "pop": 31.03, "prices": {"w1": 10.0, "m1": 10.13, "m3": 25.1, "m6": 23.29, "y1": 24.04}, "ret_off": {"w1": 37.93, "m1": 39.72, "m3": 246.21, "m6": 221.24, "y1": 231.59}, "ret_fdc": {"w1": 5.26, "m1": 6.63, "m3": 164.21, "m6": 145.16, "y1": 153.05}, "exc_spx_f": {"w1": 3.58, "m1": 9.4, "m3": 153.24, "m6": 127.02, "y1": 124.96}, "exc_ndx_f": {"w1": 4.51, "m1": 9.83, "m3": 151.71, "m6": 130.5, "y1": 124.4}, "exc_spx_o": {"w1": 36.25, "m1": 42.49, "m3": 235.24, "m6": 203.1, "y1": 203.5}, "exc_ndx_o": {"w1": 37.18, "m1": 42.92, "m3": 233.71, "m6": 206.58, "y1": 202.94}, "last": 141.7, "life_off": 1854.48, "life_fdc": 1391.58, "days": 2073}, {"ticker": "DASH", "name": "DoorDash", "date": "2020-12-09", "year": 2020, "sector": "Internet/Consumer", "structure": "IPO", "region": "US", "capB": 39, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 102.0, "fdc": 189.51, "pop": 85.79, "prices": {"w1": 158.05, "m1": 156.09, "m3": 135.77, "m6": 136.98, "y1": 164.86}, "ret_off": {"w1": 54.95, "m1": 53.03, "m3": 33.11, "m6": 34.29, "y1": 61.63}, "ret_fdc": {"w1": -16.6, "m1": -17.63, "m3": -28.36, "m6": -27.72, "y1": -13.01}, "exc_spx_f": {"w1": -17.37, "m1": -21.76, "m3": -34.51, "m6": -42.61, "y1": -40.09}, "exc_ndx_f": {"w1": -19.05, "m1": -23.62, "m3": -31.49, "m6": -39.45, "y1": -43.62}, "exc_spx_o": {"w1": 54.18, "m1": 48.9, "m3": 26.96, "m6": 19.4, "y1": 34.55}, "exc_ndx_o": {"w1": 52.5, "m1": 47.04, "m3": 29.98, "m6": 22.56, "y1": 31.02}, "last": 160.07, "life_off": 56.93, "life_fdc": -15.53, "days": 2003}, {"ticker": "AI", "name": "C3.ai", "date": "2020-12-09", "year": 2020, "sector": "AI/ML", "structure": "IPO", "region": "US", "capB": 4, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 42.0, "fdc": 92.49, "pop": 120.21, "prices": {"w1": 113.69, "m1": 143.63, "m3": 84.56, "m6": 62.1, "y1": 32.09}, "ret_off": {"w1": 170.69, "m1": 241.98, "m3": 101.33, "m6": 47.86, "y1": -23.6}, "ret_fdc": {"w1": 22.92, "m1": 55.29, "m3": -8.57, "m6": -32.86, "y1": -65.3}, "exc_spx_f": {"w1": 22.15, "m1": 51.16, "m3": -14.72, "m6": -47.75, "y1": -92.38}, "exc_ndx_f": {"w1": 20.47, "m1": 49.3, "m3": -11.7, "m6": -44.59, "y1": -95.91}, "exc_spx_o": {"w1": 169.92, "m1": 237.85, "m3": 95.18, "m6": 32.97, "y1": -50.68}, "exc_ndx_o": {"w1": 168.24, "m1": 235.99, "m3": 98.2, "m6": 36.13, "y1": -54.21}, "last": 10.58, "life_off": -74.81, "life_fdc": -88.56, "days": 2003}, {"ticker": "ABNB", "name": "Airbnb", "date": "2020-12-10", "year": 2020, "sector": "Travel/Leisure", "structure": "IPO", "region": "US", "capB": 47, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 68.0, "fdc": 144.71, "pop": 112.81, "prices": {"w1": 147.05, "m1": 149.77, "m3": 197.87, "m6": 146.12, "y1": 180.42}, "ret_off": {"w1": 116.25, "m1": 120.25, "m3": 190.99, "m6": 114.88, "y1": 165.32}, "ret_fdc": {"w1": 1.62, "m1": 3.5, "m3": 36.74, "m6": 0.97, "y1": 24.68}, "exc_spx_f": {"w1": 0.14, "m1": -0.77, "m3": 29.35, "m6": -14.6, "y1": -3.78}, "exc_ndx_f": {"w1": -1.2, "m1": -2.17, "m3": 31.49, "m6": -11.6, "y1": -7.01}, "exc_spx_o": {"w1": 114.77, "m1": 115.98, "m3": 183.6, "m6": 99.31, "y1": 136.86}, "exc_ndx_o": {"w1": 113.43, "m1": 114.58, "m3": 185.74, "m6": 102.31, "y1": 133.63}, "last": 133.72, "life_off": 96.65, "life_fdc": -7.59, "days": 2002}, {"ticker": "AFRM", "name": "Affirm", "date": "2021-01-13", "year": 2021, "sector": "Fintech", "structure": "IPO", "region": "US", "capB": 12, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 49.0, "fdc": 96.36, "pop": 96.66, "prices": {"w1": 106.21, "m1": 125.89, "m3": 68.73, "m6": 56.76, "y1": 72.13}, "ret_off": {"w1": 116.76, "m1": 156.92, "m3": 40.27, "m6": 15.84, "y1": 47.2}, "ret_fdc": {"w1": 10.22, "m1": 30.64, "m3": -28.68, "m6": -41.1, "y1": -25.15}, "exc_spx_f": {"w1": 9.12, "m1": 27.36, "m3": -36.94, "m6": -55.92, "y1": -47.44}, "exc_ndx_f": {"w1": 7.73, "m1": 24.21, "m3": -35.08, "m6": -55.95, "y1": -44.59}, "exc_spx_o": {"w1": 115.66, "m1": 153.64, "m3": 32.01, "m6": 1.02, "y1": 24.91}, "exc_ndx_o": {"w1": 114.27, "m1": 150.49, "m3": 33.87, "m6": 0.99, "y1": 27.76}, "last": 68.7, "life_off": 40.2, "life_fdc": -28.71, "days": 1968}, {"ticker": "BMBL", "name": "Bumble", "date": "2021-02-11", "year": 2021, "sector": "Internet/Consumer", "structure": "IPO", "region": "US", "capB": 8, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 43.0, "fdc": 70.31, "pop": 63.51, "prices": {"w1": 74.0, "m1": 69.26, "m3": 40.48, "m6": 50.83, "y1": 28.1}, "ret_off": {"w1": 72.09, "m1": 61.07, "m3": -5.86, "m6": 18.21, "y1": -34.65}, "ret_fdc": {"w1": 5.25, "m1": -1.49, "m3": -42.43, "m6": -27.71, "y1": -60.03}, "exc_spx_f": {"w1": 5.31, "m1": -2.18, "m3": -47.44, "m6": -41.61, "y1": -72.85}, "exc_ndx_f": {"w1": 5.96, "m1": 4.31, "m3": -37.88, "m6": -37.57, "y1": -63.81}, "exc_spx_o": {"w1": 72.15, "m1": 60.38, "m3": -10.87, "m6": 4.31, "y1": -47.47}, "exc_ndx_o": {"w1": 72.8, "m1": 66.87, "m3": -1.31, "m6": 8.35, "y1": -38.43}, "last": 2.99, "life_off": -93.05, "life_fdc": -95.75, "days": 1939}, {"ticker": "RBLX", "name": "Roblox", "date": "2021-03-10", "year": 2021, "sector": "Gaming", "structure": "Direct", "region": "US", "capB": 38, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 45.0, "fdc": 69.5, "pop": 54.44, "prices": {"w1": 76.79, "m1": 71.83, "m3": 91.04, "m6": 83.51, "y1": 41.47}, "ret_off": {"w1": 70.64, "m1": 59.62, "m3": 102.31, "m6": 85.58, "y1": -7.84}, "ret_fdc": {"w1": 10.49, "m1": 3.35, "m3": 30.99, "m6": 20.16, "y1": -40.33}, "exc_spx_f": {"w1": 8.56, "m1": -2.55, "m3": 22.76, "m6": 4.38, "y1": -49.58}, "exc_ndx_f": {"w1": 6.96, "m1": -5.22, "m3": 22.66, "m6": -2.34, "y1": -46.91}, "exc_spx_o": {"w1": 68.71, "m1": 53.72, "m3": 94.08, "m6": 69.8, "y1": -17.09}, "exc_ndx_o": {"w1": 67.11, "m1": 51.05, "m3": 93.98, "m6": 63.08, "y1": -14.42}, "last": 43.35, "life_off": -3.67, "life_fdc": -37.63, "days": 1912}, {"ticker": "CPNG", "name": "Coupang", "date": "2021-03-11", "year": 2021, "sector": "E-commerce", "structure": "IPO", "region": "Intl", "capB": 60, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 35.0, "fdc": 49.25, "pop": 40.71, "prices": {"w1": 43.89, "m1": 45.85, "m3": 38.06, "m6": 30.25, "y1": 17.42}, "ret_off": {"w1": 25.4, "m1": 31.0, "m3": 8.74, "m6": -13.57, "y1": -50.23}, "ret_fdc": {"w1": -10.88, "m1": -6.9, "m3": -22.72, "m6": -38.58, "y1": -64.63}, "exc_spx_f": {"w1": -10.27, "m1": -11.71, "m3": -30.33, "m6": -52.64, "y1": -71.36}, "exc_ndx_f": {"w1": -8.86, "m1": -12.97, "m3": -29.67, "m6": -57.8, "y1": -66.54}, "exc_spx_o": {"w1": 26.01, "m1": 26.19, "m3": 1.13, "m6": -27.63, "y1": -56.96}, "exc_ndx_o": {"w1": 27.42, "m1": 24.93, "m3": 1.79, "m6": -32.79, "y1": -52.14}, "last": 16.53, "life_off": -52.77, "life_fdc": -66.44, "days": 1911}, {"ticker": "COIN", "name": "Coinbase", "date": "2021-04-14", "year": 2021, "sector": "Crypto", "structure": "Direct", "region": "US", "capB": 85, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 250.0, "fdc": 328.28, "pop": 31.31, "prices": {"w1": 311.92, "m1": 258.37, "m3": 229.94, "m6": 246.78, "y1": 147.29}, "ret_off": {"w1": 24.77, "m1": 3.35, "m3": -8.02, "m6": -1.29, "y1": -41.08}, "ret_fdc": {"w1": -4.98, "m1": -21.3, "m3": -29.96, "m6": -24.83, "y1": -55.13}, "exc_spx_f": {"w1": -6.16, "m1": -22.49, "m3": -36.01, "m6": -30.63, "y1": -61.63}, "exc_ndx_f": {"w1": -5.93, "m1": -18.32, "m3": -37.9, "m6": -31.86, "y1": -55.78}, "exc_spx_o": {"w1": 23.59, "m1": 2.16, "m3": -14.07, "m6": -7.09, "y1": -47.58}, "exc_ndx_o": {"w1": 23.82, "m1": 6.33, "m3": -15.96, "m6": -8.32, "y1": -41.73}, "last": 164.13, "life_off": -34.35, "life_fdc": -50.0, "days": 1877}, {"ticker": "APP", "name": "AppLovin", "date": "2021-04-15", "year": 2021, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 28, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 80.0, "fdc": 65.2, "pop": -18.5, "prices": {"w1": 62.1, "m1": 57.26, "m3": 63.43, "m6": 90.79, "y1": 48.96}, "ret_off": {"w1": -22.38, "m1": -28.43, "m3": -20.71, "m6": 13.49, "y1": -38.8}, "ret_fdc": {"w1": -4.75, "m1": -12.18, "m3": -2.71, "m6": 39.25, "y1": -24.91}, "exc_spx_f": {"w1": -3.9, "m1": -12.26, "m3": -7.26, "m6": 32.83, "y1": -30.24}, "exc_ndx_f": {"w1": -2.87, "m1": -7.67, "m3": -8.19, "m6": 31.93, "y1": -23.96}, "exc_spx_o": {"w1": -21.53, "m1": -28.51, "m3": -25.26, "m6": 7.07, "y1": -44.13}, "exc_ndx_o": {"w1": -20.5, "m1": -23.92, "m3": -26.19, "m6": 6.17, "y1": -37.85}, "last": 558.87, "life_off": 598.59, "life_fdc": 757.16, "days": 1876}, {"ticker": "PATH", "name": "UiPath", "date": "2021-04-21", "year": 2021, "sector": "AI/ML", "structure": "IPO", "region": "US", "capB": 36, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 56.0, "fdc": 69.0, "pop": 23.21, "prices": {"w1": 75.41, "m1": 78.75, "m3": 62.8, "m6": 51.7, "y1": 18.04}, "ret_off": {"w1": 34.66, "m1": 40.62, "m3": 12.14, "m6": -7.68, "y1": -67.79}, "ret_fdc": {"w1": 9.29, "m1": 14.13, "m3": -8.99, "m6": -25.07, "y1": -73.86}, "exc_spx_f": {"w1": 9.06, "m1": 14.55, "m3": -13.43, "m6": -33.76, "y1": -79.14}, "exc_ndx_f": {"w1": 9.53, "m1": 17.89, "m3": -15.5, "m6": -35.5, "y1": -72.32}, "exc_spx_o": {"w1": 34.43, "m1": 41.04, "m3": 7.7, "m6": -16.37, "y1": -73.07}, "exc_ndx_o": {"w1": 34.9, "m1": 44.38, "m3": 5.63, "m6": -18.11, "y1": -66.25}, "last": 11.67, "life_off": -79.16, "life_fdc": -83.09, "days": 1870}, {"ticker": "MQ", "name": "Marqeta", "date": "2021-06-09", "year": 2021, "sector": "Fintech", "structure": "IPO", "region": "US", "capB": 15, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 27.0, "fdc": 30.52, "pop": 13.04, "prices": {"w1": 29.97, "m1": 26.78, "m3": 26.07, "m6": 19.11, "y1": 10.0}, "ret_off": {"w1": 11.0, "m1": -0.81, "m3": -3.44, "m6": -29.22, "y1": -62.96}, "ret_fdc": {"w1": -1.8, "m1": -12.25, "m3": -14.58, "m6": -37.39, "y1": -67.23}, "exc_spx_f": {"w1": -1.9, "m1": -15.8, "m3": -21.56, "m6": -48.8, "y1": -62.45}, "exc_ndx_f": {"w1": -3.02, "m1": -19.57, "m3": -27.65, "m6": -56.06, "y1": -56.05}, "exc_spx_o": {"w1": 10.9, "m1": -4.36, "m3": -10.42, "m6": -40.63, "y1": -58.18}, "exc_ndx_o": {"w1": 9.78, "m1": -8.13, "m3": -16.51, "m6": -47.89, "y1": -51.78}, "last": 4.03, "life_off": -85.07, "life_fdc": -86.8, "days": 1821}, {"ticker": "DIDIY", "name": "Didi", "date": "2021-06-30", "year": 2021, "sector": "Mobility", "structure": "IPO", "region": "Intl", "capB": 68, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Delisted", "offer": 14.0, "fdc": 14.14, "pop": 1.0, "prices": {"w1": 11.91, "m1": 10.31, "m3": 7.78, "m6": 4.94, "y1": 2.95}, "ret_off": {"w1": -14.93, "m1": -26.36, "m3": -44.43, "m6": -64.71, "y1": -78.93}, "ret_fdc": {"w1": -15.77, "m1": -27.09, "m3": -44.98, "m6": -65.06, "y1": -79.14}, "exc_spx_f": {"w1": -17.18, "m1": -29.36, "m3": -46.42, "m6": -76.59, "y1": -67.22}, "exc_ndx_f": {"w1": -17.53, "m1": -29.87, "m3": -46.34, "m6": -78.36, "y1": -58.18}, "exc_spx_o": {"w1": -16.34, "m1": -28.63, "m3": -45.87, "m6": -76.24, "y1": -67.01}, "exc_ndx_o": {"w1": -16.69, "m1": -29.14, "m3": -45.79, "m6": -78.01, "y1": -57.97}, "last": 3.58, "life_off": -74.43, "life_fdc": -74.68, "days": 1800}, {"ticker": "DUOL", "name": "Duolingo", "date": "2021-07-28", "year": 2021, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 3.7, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 102.0, "fdc": 134.26, "pop": 31.62, "prices": {"w1": 141.5, "m1": 120.1, "m3": 175.29, "m6": 91.87, "y1": 94.95}, "ret_off": {"w1": 38.73, "m1": 17.75, "m3": 71.85, "m6": -9.93, "y1": -6.91}, "ret_fdc": {"w1": 5.4, "m1": -10.54, "m3": 30.56, "m6": -31.57, "y1": -29.28}, "exc_spx_f": {"w1": 5.35, "m1": -13.01, "m3": 27.13, "m6": -30.42, "y1": -21.82}, "exc_ndx_f": {"w1": 4.97, "m1": -13.3, "m3": 26.7, "m6": -25.94, "y1": -13.96}, "exc_spx_o": {"w1": 38.68, "m1": 15.28, "m3": 68.42, "m6": -8.78, "y1": 0.55}, "exc_ndx_o": {"w1": 38.3, "m1": 14.99, "m3": 67.99, "m6": -4.3, "y1": 8.41}, "last": 109.15, "life_off": 7.01, "life_fdc": -18.7, "days": 1772}, {"ticker": "HOOD", "name": "Robinhood", "date": "2021-07-29", "year": 2021, "sector": "Fintech", "structure": "IPO", "region": "US", "capB": 32, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 38.0, "fdc": 34.82, "pop": -8.37, "prices": {"w1": 50.97, "m1": 46.87, "m3": 35.47, "m6": 11.61, "y1": 9.05}, "ret_off": {"w1": 34.13, "m1": 23.34, "m3": -6.66, "m6": -69.45, "y1": -76.18}, "ret_fdc": {"w1": 46.38, "m1": 34.61, "m3": 1.87, "m6": -66.66, "y1": -74.01}, "exc_spx_f": {"w1": 46.15, "m1": 32.57, "m3": -2.14, "m6": -64.56, "y1": -67.47}, "exc_ndx_f": {"w1": 45.49, "m1": 32.05, "m3": -2.98, "m6": -59.71, "y1": -60.05}, "exc_spx_o": {"w1": 33.9, "m1": 21.3, "m3": -10.67, "m6": -67.35, "y1": -69.64}, "exc_ndx_o": {"w1": 33.24, "m1": 20.78, "m3": -11.51, "m6": -62.5, "y1": -62.22}, "last": 88.33, "life_off": 132.45, "life_fdc": 153.68, "days": 1771}, {"ticker": "TOST", "name": "Toast", "date": "2021-09-22", "year": 2021, "sector": "Fintech", "structure": "IPO", "region": "US", "capB": 20, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 40.0, "fdc": 62.51, "pop": 56.27, "prices": {"w1": 49.78, "m1": 49.62, "m3": 37.84, "m6": 19.91, "y1": 17.77}, "ret_off": {"w1": 24.45, "m1": 24.05, "m3": -5.4, "m6": -50.23, "y1": -55.57}, "ret_fdc": {"w1": -20.36, "m1": -20.62, "m3": -39.47, "m6": -68.15, "y1": -71.57}, "exc_spx_f": {"w1": -19.54, "m1": -24.02, "m3": -46.32, "m6": -69.53, "y1": -57.06}, "exc_ndx_f": {"w1": -17.57, "m1": -21.8, "m3": -46.08, "m6": -63.35, "y1": -47.36}, "exc_spx_o": {"w1": 25.27, "m1": 20.65, "m3": -12.25, "m6": -51.61, "y1": -41.06}, "exc_ndx_o": {"w1": 27.24, "m1": 22.87, "m3": -12.01, "m6": -45.43, "y1": -31.36}, "last": 25.22, "life_off": -36.95, "life_fdc": -59.65, "days": 1716}, {"ticker": "FRSH", "name": "Freshworks", "date": "2021-09-22", "year": 2021, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 10, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 36.0, "fdc": 47.55, "pop": 32.08, "prices": {"w1": 42.27, "m1": 46.92, "m3": 27.25, "m6": 20.52, "y1": 13.39}, "ret_off": {"w1": 17.42, "m1": 30.33, "m3": -24.31, "m6": -43.0, "y1": -62.81}, "ret_fdc": {"w1": -11.1, "m1": -1.32, "m3": -42.69, "m6": -56.85, "y1": -71.84}, "exc_spx_f": {"w1": -10.28, "m1": -4.72, "m3": -49.54, "m6": -58.23, "y1": -57.33}, "exc_ndx_f": {"w1": -8.31, "m1": -2.5, "m3": -49.3, "m6": -52.05, "y1": -47.63}, "exc_spx_o": {"w1": 18.24, "m1": 26.93, "m3": -31.16, "m6": -44.38, "y1": -48.3}, "exc_ndx_o": {"w1": 20.21, "m1": 29.15, "m3": -30.92, "m6": -38.2, "y1": -38.6}, "last": 9.59, "life_off": -73.36, "life_fdc": -79.83, "days": 1716}, {"ticker": "AMPL", "name": "Amplitude", "date": "2021-09-28", "year": 2021, "sector": "Data/Analytics", "structure": "Direct", "region": "US", "capB": 5, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 35.0, "fdc": 54.8, "pop": 56.57, "prices": {"w1": 52.25, "m1": 73.07, "m3": 55.55, "m6": 19.35, "y1": 16.23}, "ret_off": {"w1": 49.29, "m1": 108.77, "m3": 58.71, "m6": -44.71, "y1": -53.63}, "ret_fdc": {"w1": -4.65, "m1": 33.34, "m3": 1.37, "m6": -64.69, "y1": -70.38}, "exc_spx_f": {"w1": -4.49, "m1": 27.74, "m3": -8.59, "m6": -71.1, "y1": -55.82}, "exc_ndx_f": {"w1": -4.0, "m1": 26.52, "m3": -10.26, "m6": -67.87, "y1": -48.2}, "exc_spx_o": {"w1": 49.45, "m1": 103.17, "m3": 48.75, "m6": -51.12, "y1": -39.07}, "exc_ndx_o": {"w1": 49.94, "m1": 101.95, "m3": 47.08, "m6": -47.89, "y1": -31.45}, "last": 7.75, "life_off": -77.86, "life_fdc": -85.86, "days": 1710}, {"ticker": "GTLB", "name": "GitLab", "date": "2021-10-14", "year": 2021, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 11, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 77.0, "fdc": 103.89, "pop": 34.92, "prices": {"w1": 112.67, "m1": 125.0, "m3": 65.53, "m6": 50.46, "y1": 41.93}, "ret_off": {"w1": 46.32, "m1": 62.34, "m3": -14.9, "m6": -34.47, "y1": -45.55}, "ret_fdc": {"w1": 8.45, "m1": 20.32, "m3": -36.92, "m6": -51.43, "y1": -59.64}, "exc_spx_f": {"w1": 5.94, "m1": 14.81, "m3": -41.89, "m6": -50.4, "y1": -40.37}, "exc_ndx_f": {"w1": 5.55, "m1": 12.7, "m3": -39.86, "m6": -43.73, "y1": -30.67}, "exc_spx_o": {"w1": 43.81, "m1": 56.83, "m3": -19.87, "m6": -33.44, "y1": -26.28}, "exc_ndx_o": {"w1": 43.42, "m1": 54.72, "m3": -17.84, "m6": -26.77, "y1": -16.58}, "last": 30.84, "life_off": -59.95, "life_fdc": -70.31, "days": 1694}, {"ticker": "GFS", "name": "GlobalFoundries", "date": "2021-10-28", "year": 2021, "sector": "Semiconductors", "structure": "IPO", "region": "US", "capB": 25, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 47.0, "fdc": 46.4, "pop": -1.28, "prices": {"w1": 62.68, "m1": 67.29, "m3": 44.71, "m6": 54.06, "y1": 57.25}, "ret_off": {"w1": 33.36, "m1": 43.17, "m3": -4.87, "m6": 15.02, "y1": 21.81}, "ret_fdc": {"w1": 35.09, "m1": 45.02, "m3": -3.64, "m6": 16.51, "y1": 23.38}, "exc_spx_f": {"w1": 33.27, "m1": 45.06, "m3": 2.23, "m6": 23.23, "y1": 38.51}, "exc_ndx_f": {"w1": 31.49, "m1": 43.45, "m3": 7.61, "m6": 31.23, "y1": 50.2}, "exc_spx_o": {"w1": 31.54, "m1": 43.21, "m3": 1.0, "m6": 21.74, "y1": 36.94}, "exc_ndx_o": {"w1": 29.76, "m1": 41.6, "m3": 6.38, "m6": 29.74, "y1": 48.63}, "last": 84.7, "life_off": 80.21, "life_fdc": 82.54, "days": 1680}, {"ticker": "RIVN", "name": "Rivian", "date": "2021-11-10", "year": 2021, "sector": "EV/Auto", "structure": "IPO", "region": "US", "capB": 66, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 78.0, "fdc": 100.73, "pop": 29.14, "prices": {"w1": 146.07, "m1": 114.66, "m3": 64.53, "m6": 20.6, "y1": 32.96}, "ret_off": {"w1": 87.27, "m1": 47.0, "m3": -17.27, "m6": -73.59, "y1": -57.74}, "ret_fdc": {"w1": 45.01, "m1": 13.83, "m3": -35.94, "m6": -79.55, "y1": -67.28}, "exc_spx_f": {"w1": 44.11, "m1": 12.42, "m3": -34.66, "m6": -64.24, "y1": -52.42}, "exc_ndx_f": {"w1": 42.99, "m1": 11.66, "m3": -30.13, "m6": -54.41, "y1": -39.88}, "exc_spx_o": {"w1": 86.37, "m1": 45.59, "m3": -15.99, "m6": -58.28, "y1": -42.88}, "exc_ndx_o": {"w1": 85.25, "m1": 44.83, "m3": -11.46, "m6": -48.45, "y1": -30.34}, "last": 18.12, "life_off": -76.77, "life_fdc": -82.01, "days": 1667}, {"ticker": "NU", "name": "Nubank", "date": "2021-12-09", "year": 2021, "sector": "Fintech", "structure": "IPO", "region": "Intl", "capB": 41, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 9.0, "fdc": 10.33, "pop": 14.78, "prices": {"w1": 10.0, "m1": 9.36, "m3": 7.05, "m6": 3.86, "y1": 3.93}, "ret_off": {"w1": 11.11, "m1": 4.0, "m3": -21.67, "m6": -57.11, "y1": -56.33}, "ret_fdc": {"w1": -3.19, "m1": -9.39, "m3": -31.75, "m6": -62.63, "y1": -61.96}, "exc_spx_f": {"w1": -3.22, "m1": -9.6, "m3": -23.01, "m6": -48.71, "y1": -46.25}, "exc_ndx_f": {"w1": -1.42, "m1": -5.94, "m3": -15.91, "m6": -38.61, "y1": -33.56}, "exc_spx_o": {"w1": 11.08, "m1": 3.79, "m3": -12.93, "m6": -43.19, "y1": -40.62}, "exc_ndx_o": {"w1": 12.88, "m1": 7.45, "m3": -5.83, "m6": -33.09, "y1": -27.93}, "last": 12.12, "life_off": 34.67, "life_fdc": 17.33, "days": 1638}, {"ticker": "IOT", "name": "Samsara", "date": "2021-12-15", "year": 2021, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 11.5, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 23.0, "fdc": 24.7, "pop": 7.39, "prices": {"w1": 27.0, "m1": 22.91, "m3": 15.16, "m6": 11.38, "y1": 12.82}, "ret_off": {"w1": 17.39, "m1": -0.39, "m3": -34.09, "m6": -50.52, "y1": -44.26}, "ret_fdc": {"w1": 9.31, "m1": -7.25, "m3": -38.62, "m6": -53.93, "y1": -48.1}, "exc_spx_f": {"w1": 9.59, "m1": -6.25, "m3": -31.15, "m6": -34.4, "y1": -30.81}, "exc_ndx_f": {"w1": 9.98, "m1": -3.09, "m3": -24.3, "m6": -25.1, "y1": -17.75}, "exc_spx_o": {"w1": 17.67, "m1": 0.61, "m3": -26.62, "m6": -30.99, "y1": -26.97}, "exc_ndx_o": {"w1": 18.06, "m1": 3.77, "m3": -19.77, "m6": -21.69, "y1": -13.91}, "last": 35.21, "life_off": 53.09, "life_fdc": 42.55, "days": 1632}, {"ticker": "CRBG", "name": "Corebridge Financial", "date": "2022-09-16", "year": 2022, "sector": "Financials", "structure": "IPO", "region": "US", "capB": 13.6, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 21.0, "fdc": 20.72, "pop": -1.33, "prices": {"w1": 20.25, "m1": 20.02, "m3": 18.87, "m6": 15.63, "y1": 18.76}, "ret_off": {"w1": -3.57, "m1": -4.67, "m3": -10.14, "m6": -25.57, "y1": -10.67}, "ret_fdc": {"w1": -2.27, "m1": -3.38, "m3": -8.93, "m6": -24.57, "y1": -9.46}, "exc_spx_f": {"w1": 2.38, "m1": 4.11, "m3": -8.39, "m6": -25.69, "y1": -24.36}, "exc_ndx_f": {"w1": 2.37, "m1": 6.48, "m3": -3.72, "m6": -30.12, "y1": -37.63}, "exc_spx_o": {"w1": 1.08, "m1": 2.82, "m3": -9.6, "m6": -26.69, "y1": -25.57}, "exc_ndx_o": {"w1": 1.07, "m1": 5.19, "m3": -4.93, "m6": -31.12, "y1": -38.84}, "last": 26.42, "life_off": 25.81, "life_fdc": 27.51, "days": 1357}, {"ticker": "MBLY", "name": "Mobileye", "date": "2022-10-26", "year": 2022, "sector": "Semiconductors", "structure": "IPO", "region": "US", "capB": 17, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 21.0, "fdc": 28.97, "pop": 37.95, "prices": {"w1": 25.49, "m1": 29.4, "m3": 33.95, "m6": 43.09, "y1": 36.42}, "ret_off": {"w1": 21.38, "m1": 40.0, "m3": 61.67, "m6": 105.19, "y1": 73.43}, "ret_fdc": {"w1": -12.01, "m1": 1.48, "m3": 17.19, "m6": 48.74, "y1": 25.72}, "exc_spx_f": {"w1": -10.16, "m1": -3.62, "m3": 12.34, "m6": 42.86, "y1": 17.72}, "exc_ndx_f": {"w1": -7.63, "m1": -1.59, "m3": 13.61, "m6": 36.46, "y1": 2.02}, "exc_spx_o": {"w1": 23.23, "m1": 34.9, "m3": 56.82, "m6": 99.31, "y1": 65.43}, "exc_ndx_o": {"w1": 25.76, "m1": 36.93, "m3": 58.09, "m6": 92.91, "y1": 49.73}, "last": 10.54, "life_off": -49.81, "life_fdc": -63.62, "days": 1317}, {"ticker": "KVUE", "name": "Kenvue", "date": "2023-05-04", "year": 2023, "sector": "Healthcare", "structure": "IPO", "region": "US", "capB": 41, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 22.0, "fdc": 26.9, "pop": 22.27, "prices": {"w1": 26.0, "m1": 25.55, "m3": 23.99, "m6": 19.23, "y1": 19.2}, "ret_off": {"w1": 18.18, "m1": 16.14, "m3": 9.05, "m6": -12.59, "y1": -12.73}, "ret_fdc": {"w1": -3.35, "m1": -5.02, "m3": -10.82, "m6": -28.51, "y1": -28.62}, "exc_spx_f": {"w1": -5.06, "m1": -10.47, "m3": -21.67, "m6": -34.83, "y1": -54.88}, "exc_ndx_f": {"w1": -6.49, "m1": -17.07, "m3": -29.08, "m6": -43.43, "y1": -66.43}, "exc_spx_o": {"w1": 16.47, "m1": 10.69, "m3": -1.8, "m6": -18.91, "y1": -38.99}, "exc_ndx_o": {"w1": 15.04, "m1": 4.09, "m3": -9.21, "m6": -27.51, "y1": -50.54}, "last": 16.88, "life_off": -23.27, "life_fdc": -37.25, "days": 1127}, {"ticker": "ARM", "name": "Arm Holdings", "date": "2023-09-14", "year": 2023, "sector": "Semiconductors", "structure": "IPO", "region": "Intl", "capB": 54, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 51.0, "fdc": 63.59, "pop": 24.69, "prices": {"w1": 52.16, "m1": 50.78, "m3": 70.74, "m6": 130.96, "y1": 147.37}, "ret_off": {"w1": 2.27, "m1": -0.43, "m3": 38.7, "m6": 156.78, "y1": 188.96}, "ret_fdc": {"w1": -17.97, "m1": -20.14, "m3": 11.24, "m6": 105.94, "y1": 131.75}, "exc_spx_f": {"w1": -14.08, "m1": -16.2, "m3": 6.48, "m6": 91.61, "y1": 106.87}, "exc_ndx_f": {"w1": -12.93, "m1": -17.05, "m3": 4.36, "m6": 89.52, "y1": 105.64}, "exc_spx_o": {"w1": 6.16, "m1": 3.51, "m3": 33.94, "m6": 142.45, "y1": 164.08}, "exc_ndx_o": {"w1": 7.31, "m1": 2.66, "m3": 31.82, "m6": 140.36, "y1": 162.85}, "last": 393.44, "life_off": 671.45, "life_fdc": 518.71, "days": 994}, {"ticker": "CART", "name": "Instacart", "date": "2023-09-19", "year": 2023, "sector": "Internet/Consumer", "structure": "IPO", "region": "US", "capB": 10, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 30.0, "fdc": 33.7, "pop": 12.33, "prices": {"w1": 29.89, "m1": 24.43, "m3": 24.61, "m6": 36.99, "y1": 39.87}, "ret_off": {"w1": -0.37, "m1": -18.57, "m3": -17.97, "m6": 23.3, "y1": 32.9}, "ret_fdc": {"w1": -11.31, "m1": -27.51, "m3": -26.97, "m6": 9.76, "y1": 18.31}, "exc_spx_f": {"w1": -7.48, "m1": -23.78, "m3": -34.27, "m6": -6.77, "y1": -8.11}, "exc_ndx_f": {"w1": -7.06, "m1": -24.82, "m3": -37.64, "m6": -8.94, "y1": -9.03}, "exc_spx_o": {"w1": 3.46, "m1": -14.84, "m3": -25.27, "m6": 6.77, "y1": 6.48}, "exc_ndx_o": {"w1": 3.88, "m1": -15.88, "m3": -28.64, "m6": 4.6, "y1": 5.56}, "last": 41.48, "life_off": 38.27, "life_fdc": 23.09, "days": 989}, {"ticker": "KVYO", "name": "Klaviyo", "date": "2023-09-20", "year": 2023, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 9.2, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 30.0, "fdc": 32.76, "pop": 9.2, "prices": {"w1": 35.07, "m1": 29.01, "m3": 28.53, "m6": 26.37, "y1": 33.48}, "ret_off": {"w1": 16.9, "m1": -3.3, "m3": -4.9, "m6": -12.1, "y1": 11.6}, "ret_fdc": {"w1": 7.05, "m1": -11.45, "m3": -12.91, "m6": -19.51, "y1": 2.2}, "exc_spx_f": {"w1": 9.95, "m1": -7.41, "m3": -19.64, "m6": -38.19, "y1": -27.59}, "exc_ndx_f": {"w1": 9.65, "m1": -8.72, "m3": -23.49, "m6": -41.36, "y1": -30.33}, "exc_spx_o": {"w1": 19.8, "m1": 0.74, "m3": -11.63, "m6": -30.78, "y1": -18.19}, "exc_ndx_o": {"w1": 19.5, "m1": -0.57, "m3": -15.48, "m6": -33.95, "y1": -20.93}, "last": 15.78, "life_off": -47.4, "life_fdc": -51.83, "days": 988}, {"ticker": "ALAB", "name": "Astera Labs", "date": "2024-03-20", "year": 2024, "sector": "Semiconductors", "structure": "IPO", "region": "US", "capB": 5.5, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 36.0, "fdc": 62.03, "pop": 72.31, "prices": {"w1": 79.92, "m1": 64.49, "m3": 67.16, "m6": 46.44, "y1": 68.97}, "ret_off": {"w1": 122.0, "m1": 79.14, "m3": 86.56, "m6": 29.0, "y1": 91.58}, "ret_fdc": {"w1": 28.84, "m1": 3.97, "m3": 8.27, "m6": -25.13, "y1": 11.19}, "exc_spx_f": {"w1": 28.38, "m1": 8.9, "m3": 3.25, "m6": -32.66, "y1": 2.8}, "exc_ndx_f": {"w1": 28.62, "m1": 10.56, "m3": -0.88, "m6": -31.18, "y1": 3.31}, "exc_spx_o": {"w1": 121.54, "m1": 84.07, "m3": 81.54, "m6": 21.47, "y1": 83.19}, "exc_ndx_o": {"w1": 121.78, "m1": 85.73, "m3": 77.41, "m6": 22.95, "y1": 83.7}, "last": 358.05, "life_off": 894.58, "life_fdc": 477.22, "days": 806}, {"ticker": "RDDT", "name": "Reddit", "date": "2024-03-21", "year": 2024, "sector": "Internet/Consumer", "structure": "IPO", "region": "US", "capB": 6.4, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 34.0, "fdc": 50.44, "pop": 48.35, "prices": {"w1": 49.32, "m1": 40.88, "m3": 57.42, "m6": 64.56, "y1": 115.7}, "ret_off": {"w1": 45.06, "m1": 20.24, "m3": 68.88, "m6": 89.88, "y1": 240.29}, "ret_fdc": {"w1": -2.22, "m1": -18.95, "m3": 13.84, "m6": 27.99, "y1": 129.38}, "exc_spx_f": {"w1": -2.46, "m1": -13.72, "m3": 9.42, "m6": 18.98, "y1": 121.25}, "exc_ndx_f": {"w1": -1.86, "m1": -11.95, "m3": 6.02, "m6": 19.7, "y1": 121.55}, "exc_spx_o": {"w1": 44.82, "m1": 25.47, "m3": 64.46, "m6": 80.87, "y1": 232.16}, "exc_ndx_o": {"w1": 45.42, "m1": 27.24, "m3": 61.06, "m6": 81.59, "y1": 232.46}, "last": 183.91, "life_off": 440.91, "life_fdc": 264.61, "days": 805}, {"ticker": "RBRK", "name": "Rubrik", "date": "2024-04-25", "year": 2024, "sector": "Cybersecurity", "structure": "IPO", "region": "US", "capB": 5.6, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 32.0, "fdc": 37.0, "pop": 15.62, "prices": {"w1": 33.91, "m1": 33.56, "m3": 34.42, "m6": 38.91, "y1": 69.84}, "ret_off": {"w1": 5.97, "m1": 4.88, "m3": 7.56, "m6": 21.59, "y1": 118.25}, "ret_fdc": {"w1": -8.35, "m1": -9.3, "m3": -6.97, "m6": 5.16, "y1": 88.76}, "exc_spx_f": {"w1": -8.66, "m1": -14.38, "m3": -13.92, "m6": -9.92, "y1": 79.32}, "exc_ndx_f": {"w1": -8.99, "m1": -17.2, "m3": -15.0, "m6": -10.92, "y1": 77.27}, "exc_spx_o": {"w1": 5.66, "m1": -0.2, "m3": 0.61, "m6": 6.51, "y1": 108.81}, "exc_ndx_o": {"w1": 5.33, "m1": -3.02, "m3": -0.47, "m6": 5.51, "y1": 106.76}, "last": 77.0, "life_off": 140.62, "life_fdc": 108.11, "days": 770}, {"ticker": "VIK", "name": "Viking Holdings", "date": "2024-05-01", "year": 2024, "sector": "Travel/Leisure", "structure": "IPO", "region": "US", "capB": 10.4, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 24.0, "fdc": 26.1, "pop": 8.75, "prices": {"w1": 28.5, "m1": 31.41, "m3": 35.7, "m6": 39.13, "y1": 40.93}, "ret_off": {"w1": 18.75, "m1": 30.87, "m3": 48.75, "m6": 63.04, "y1": 70.54}, "ret_fdc": {"w1": 9.2, "m1": 20.34, "m3": 36.78, "m6": 49.92, "y1": 56.82}, "exc_spx_f": {"w1": 5.83, "m1": 15.18, "m3": 26.74, "m6": 34.07, "y1": 45.15}, "exc_ndx_f": {"w1": 4.77, "m1": 13.31, "m3": 24.98, "m6": 32.2, "y1": 42.57}, "exc_spx_o": {"w1": 15.38, "m1": 25.71, "m3": 38.71, "m6": 47.19, "y1": 58.87}, "exc_ndx_o": {"w1": 14.32, "m1": 23.84, "m3": 36.95, "m6": 45.32, "y1": 56.29}, "last": 89.99, "life_off": 274.96, "life_fdc": 244.79, "days": 764}, {"ticker": "TEM", "name": "Tempus AI", "date": "2024-06-14", "year": 2024, "sector": "AI/ML", "structure": "IPO", "region": "US", "capB": 6, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 37.0, "fdc": 40.25, "pop": 8.78, "prices": {"w1": 28.64, "m1": 39.76, "m3": 49.38, "m6": 41.0, "y1": 71.28}, "ret_off": {"w1": -22.59, "m1": 7.46, "m3": 33.46, "m6": 10.81, "y1": 92.65}, "ret_fdc": {"w1": -28.84, "m1": -1.22, "m3": 22.68, "m6": 1.86, "y1": 77.09}, "exc_spx_f": {"w1": -29.45, "m1": -4.6, "m3": 19.1, "m6": -9.55, "y1": 67.05}, "exc_ndx_f": {"w1": -29.05, "m1": -4.64, "m3": 23.42, "m6": -8.93, "y1": 67.06}, "exc_spx_o": {"w1": -23.2, "m1": 4.08, "m3": 29.88, "m6": -0.6, "y1": 82.61}, "exc_ndx_o": {"w1": -22.8, "m1": 4.04, "m3": 34.2, "m6": 0.02, "y1": 82.62}, "last": 52.26, "life_off": 41.24, "life_fdc": 29.84, "days": 720}, {"ticker": "LINE", "name": "Lineage", "date": "2024-07-25", "year": 2024, "sector": "Industrials/Other", "structure": "IPO", "region": "US", "capB": 18, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 78.0, "fdc": 80.78, "pop": 3.56, "prices": {"w1": 86.16, "m1": 85.82, "m3": 77.69, "m6": 59.83, "y1": 43.6}, "ret_off": {"w1": 10.46, "m1": 10.03, "m3": -0.4, "m6": -23.29, "y1": -44.1}, "ret_fdc": {"w1": 6.66, "m1": 6.24, "m3": -3.83, "m6": -25.93, "y1": -46.03}, "exc_spx_f": {"w1": 5.78, "m1": 1.88, "m3": -11.44, "m6": -39.26, "y1": -64.36}, "exc_ndx_f": {"w1": 6.34, "m1": 1.51, "m3": -11.28, "m6": -42.24, "y1": -69.62}, "exc_spx_o": {"w1": 9.58, "m1": 5.67, "m3": -8.01, "m6": -36.62, "y1": -62.43}, "exc_ndx_o": {"w1": 10.14, "m1": 5.3, "m3": -7.85, "m6": -39.6, "y1": -67.69}, "last": 43.2, "life_off": -44.62, "life_fdc": -46.52, "days": 679}, {"ticker": "TTAN", "name": "ServiceTitan", "date": "2024-12-12", "year": 2024, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 9, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 71.0, "fdc": 101.0, "pop": 42.25, "prices": {"w1": 106.15, "m1": 101.26, "m3": 82.34, "m6": 102.87, "y1": 104.07}, "ret_off": {"w1": 49.51, "m1": 42.62, "m3": 15.97, "m6": 44.89, "y1": 46.58}, "ret_fdc": {"w1": 5.1, "m1": 0.26, "m3": -18.48, "m6": 1.85, "y1": 3.04}, "exc_spx_f": {"w1": 8.14, "m1": 3.97, "m3": -9.73, "m6": 1.95, "y1": -9.79}, "exc_ndx_f": {"w1": 7.44, "m1": 3.81, "m3": -7.42, "m6": 0.47, "y1": -13.53}, "exc_spx_o": {"w1": 52.55, "m1": 46.33, "m3": 24.72, "m6": 44.99, "y1": 33.75}, "exc_ndx_o": {"w1": 51.85, "m1": 46.17, "m3": 27.03, "m6": 43.51, "y1": 30.01}, "last": 74.33, "life_off": 4.69, "life_fdc": -26.41, "days": 539}, {"ticker": "VG", "name": "Venture Global", "date": "2025-01-24", "year": 2025, "sector": "Energy", "structure": "IPO", "region": "US", "capB": 60, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 25.0, "fdc": 24.0, "pop": -4.0, "prices": {"w1": 20.45, "m1": 15.37, "m3": 8.63, "m6": 14.56, "y1": 9.88}, "ret_off": {"w1": -18.2, "m1": -38.52, "m3": -65.48, "m6": -41.76, "y1": -60.48}, "ret_fdc": {"w1": -14.79, "m1": -35.96, "m3": -64.04, "m6": -39.33, "y1": -58.83}, "exc_spx_f": {"w1": -13.79, "m1": -34.52, "m3": -54.6, "m6": -44.04, "y1": -72.18}, "exc_ndx_f": {"w1": -13.43, "m1": -35.23, "m3": -53.29, "m6": -46.21, "y1": -76.43}, "exc_spx_o": {"w1": -17.2, "m1": -37.08, "m3": -56.04, "m6": -46.47, "y1": -73.83}, "exc_ndx_o": {"w1": -16.84, "m1": -37.79, "m3": -54.73, "m6": -48.64, "y1": -78.08}, "last": 13.16, "life_off": -47.36, "life_fdc": -45.17, "days": 496}, {"ticker": "SAIL", "name": "SailPoint", "date": "2025-02-13", "year": 2025, "sector": "Cybersecurity", "structure": "IPO", "region": "US", "capB": 13, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 23.0, "fdc": 22.0, "pop": -4.35, "prices": {"w1": 24.53, "m1": 18.7, "m3": 18.63, "m6": 19.83, "y1": 15.92}, "ret_off": {"w1": 6.65, "m1": -18.7, "m3": -19.0, "m6": -13.78, "y1": -30.78}, "ret_fdc": {"w1": 11.5, "m1": -15.0, "m3": -15.32, "m6": -9.86, "y1": -27.64}, "exc_spx_f": {"w1": 11.46, "m1": -7.21, "m3": -12.08, "m6": -15.64, "y1": -39.43}, "exc_ndx_f": {"w1": 11.33, "m1": -4.44, "m3": -12.17, "m6": -18.04, "y1": -39.9}, "exc_spx_o": {"w1": 6.61, "m1": -10.91, "m3": -15.76, "m6": -19.56, "y1": -42.57}, "exc_ndx_o": {"w1": 6.48, "m1": -8.14, "m3": -15.85, "m6": -21.96, "y1": -43.04}, "last": 18.61, "life_off": -19.09, "life_fdc": -15.41, "days": 476}, {"ticker": "CRWV", "name": "CoreWeave", "date": "2025-03-28", "year": 2025, "sector": "AI/ML", "structure": "IPO", "region": "US", "capB": 23, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 40.0, "fdc": 40.0, "pop": 0.0, "prices": {"w1": 47.82, "m1": 41.54, "m3": 159.99, "m6": 120.34, "y1": 74.81}, "ret_off": {"w1": 19.55, "m1": 3.85, "m3": 299.98, "m6": 200.85, "y1": 87.02}, "ret_fdc": {"w1": 19.55, "m1": 3.85, "m3": 299.98, "m6": 200.85, "y1": 87.02}, "exc_spx_f": {"w1": 28.63, "m1": 4.85, "m3": 289.37, "m6": 181.81, "y1": 72.9}, "exc_ndx_f": {"w1": 29.32, "m1": 3.07, "m3": 283.11, "m6": 173.76, "y1": 67.05}, "exc_spx_o": {"w1": 28.63, "m1": 4.85, "m3": 289.37, "m6": 181.81, "y1": 72.9}, "exc_ndx_o": {"w1": 29.32, "m1": 3.07, "m3": 283.11, "m6": 173.76, "y1": 67.05}, "last": 108.03, "life_off": 170.07, "life_fdc": 170.07, "days": 433}, {"ticker": "ETOR", "name": "eToro", "date": "2025-05-13", "year": 2025, "sector": "Fintech", "structure": "IPO", "region": "Intl", "capB": 4.5, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 52.0, "fdc": 52.0, "pop": 0.0, "prices": {"w1": 66.14, "m1": 64.17, "m3": 50.74, "m6": 41.24, "y1": 41.29}, "ret_off": {"w1": 27.19, "m1": 23.4, "m3": -2.42, "m6": -20.69, "y1": -20.6}, "ret_fdc": {"w1": 27.19, "m1": 23.4, "m3": -2.42, "m6": -20.69, "y1": -20.6}, "exc_spx_f": {"w1": 26.27, "m1": 20.7, "m3": -11.92, "m6": -37.0, "y1": -47.06}, "exc_ndx_f": {"w1": 26.39, "m1": 20.02, "m3": -14.88, "m6": -41.14, "y1": -59.14}, "exc_spx_o": {"w1": 26.27, "m1": 20.7, "m3": -11.92, "m6": -37.0, "y1": -47.06}, "exc_ndx_o": {"w1": 26.39, "m1": 20.02, "m3": -14.88, "m6": -41.14, "y1": -59.14}, "last": 39.67, "life_off": -23.71, "life_fdc": -23.71, "days": 387}, {"ticker": "HNGE", "name": "Hinge Health", "date": "2025-05-22", "year": 2025, "sector": "Healthcare", "structure": "IPO", "region": "US", "capB": 2.6, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 32.0, "fdc": 37.56, "pop": 17.38, "prices": {"w1": 39.16, "m1": 42.07, "m3": 56.0, "m6": 45.36, "y1": 55.25}, "ret_off": {"w1": 22.37, "m1": 31.47, "m3": 75.0, "m6": 41.75, "y1": 72.66}, "ret_fdc": {"w1": 4.26, "m1": 12.01, "m3": 49.09, "m6": 20.77, "y1": 47.1}, "exc_spx_f": {"w1": 3.06, "m1": 9.86, "m3": 40.05, "m6": 8.84, "y1": 19.17}, "exc_ndx_f": {"w1": 3.07, "m1": 9.58, "m3": 39.47, "m6": 6.84, "y1": 7.46}, "exc_spx_o": {"w1": 21.17, "m1": 29.32, "m3": 65.96, "m6": 29.82, "y1": 44.73}, "exc_ndx_o": {"w1": 21.18, "m1": 29.04, "m3": 65.38, "m6": 27.82, "y1": 33.02}, "last": 62.98, "life_off": 96.81, "life_fdc": 67.68, "days": 378}, {"ticker": "CRCL", "name": "Circle", "date": "2025-06-05", "year": 2025, "sector": "Crypto", "structure": "IPO", "region": "US", "capB": 6.8, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 31.0, "fdc": 83.23, "pop": 168.48, "prices": {"w1": 106.54, "m1": 188.77, "m3": 117.49, "m6": 87.46, "y1": null}, "ret_off": {"w1": 243.68, "m1": 508.94, "m3": 279.0, "m6": 182.13, "y1": null}, "ret_fdc": {"w1": 28.01, "m1": 126.81, "m3": 41.16, "m6": 5.08, "y1": null}, "exc_spx_f": {"w1": 26.23, "m1": 121.08, "m3": 31.68, "m6": -10.37, "y1": null}, "exc_ndx_f": {"w1": 26.31, "m1": 120.69, "m3": 31.48, "m6": -13.64, "y1": null}, "exc_spx_o": {"w1": 241.9, "m1": 503.21, "m3": 269.52, "m6": 166.68, "y1": null}, "exc_ndx_o": {"w1": 241.98, "m1": 502.82, "m3": 269.32, "m6": 163.41, "y1": null}, "last": 90.54, "life_off": 192.06, "life_fdc": 8.78, "days": 364}, {"ticker": "CHYM", "name": "Chime", "date": "2025-06-12", "year": 2025, "sector": "Fintech", "structure": "IPO", "region": "US", "capB": 11.6, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 27.0, "fdc": 37.11, "pop": 37.44, "prices": {"w1": 31.65, "m1": 30.13, "m3": 23.94, "m6": 27.49, "y1": null}, "ret_off": {"w1": 17.22, "m1": 11.59, "m3": -11.33, "m6": 1.81, "y1": null}, "ret_fdc": {"w1": -14.71, "m1": -18.81, "m3": -35.49, "m6": -25.92, "y1": null}, "exc_spx_f": {"w1": -13.64, "m1": -22.36, "m3": -44.46, "m6": -40.08, "y1": null}, "exc_ndx_f": {"w1": -13.83, "m1": -22.77, "m3": -44.98, "m6": -43.14, "y1": null}, "exc_spx_o": {"w1": 18.29, "m1": 8.04, "m3": -20.3, "m6": -12.35, "y1": null}, "exc_ndx_o": {"w1": 18.1, "m1": 7.63, "m3": -20.82, "m6": -15.41, "y1": null}, "last": 18.16, "life_off": -32.74, "life_fdc": -51.06, "days": 357}, {"ticker": "FIG", "name": "Figma", "date": "2025-07-31", "year": 2025, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 19, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 33.0, "fdc": 115.5, "pop": 250.0, "prices": {"w1": 78.24, "m1": 70.28, "m3": 48.84, "m6": 27.07, "y1": null}, "ret_off": {"w1": 137.09, "m1": 112.97, "m3": 48.0, "m6": -17.97, "y1": null}, "ret_fdc": {"w1": -32.26, "m1": -39.15, "m3": -57.71, "m6": -76.56, "y1": null}, "exc_spx_f": {"w1": -32.27, "m1": -41.06, "m3": -65.33, "m6": -86.49, "y1": null}, "exc_ndx_f": {"w1": -33.0, "m1": -40.0, "m3": -68.55, "m6": -88.04, "y1": null}, "exc_spx_o": {"w1": 137.08, "m1": 111.06, "m3": 40.38, "m6": -27.9, "y1": null}, "exc_ndx_o": {"w1": 136.35, "m1": 112.12, "m3": 37.16, "m6": -29.45, "y1": null}, "last": 22.51, "life_off": -31.79, "life_fdc": -80.51, "days": 308}, {"ticker": "BLSH", "name": "Bullish", "date": "2025-08-13", "year": 2025, "sector": "Crypto", "structure": "IPO", "region": "US", "capB": 5.4, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 37.0, "fdc": 68.0, "pop": 83.78, "prices": {"w1": 62.89, "m1": 51.84, "m3": 45.5, "m6": 31.88, "y1": null}, "ret_off": {"w1": 69.97, "m1": 40.11, "m3": 22.97, "m6": -13.84, "y1": null}, "ret_fdc": {"w1": -7.51, "m1": -23.76, "m3": -33.09, "m6": -53.12, "y1": null}, "exc_spx_f": {"w1": -6.42, "m1": -25.58, "m3": -39.03, "m6": -60.46, "y1": null}, "exc_ndx_f": {"w1": -5.0, "m1": -24.78, "m3": -40.09, "m6": -58.79, "y1": null}, "exc_spx_o": {"w1": 71.06, "m1": 38.29, "m3": 17.03, "m6": -21.18, "y1": null}, "exc_ndx_o": {"w1": 72.48, "m1": 39.09, "m3": 15.97, "m6": -19.51, "y1": null}, "last": 29.66, "life_off": -19.84, "life_fdc": -56.38, "days": 295}, {"ticker": "KLAR", "name": "Klarna", "date": "2025-09-11", "year": 2025, "sector": "Fintech", "structure": "IPO", "region": "Intl", "capB": 15, "bucket": "Large ($10-40B)", "tier": "Core (>=$10B)", "status": "Active", "offer": 40.0, "fdc": 42.74, "pop": 6.85, "prices": {"w1": 44.99, "m1": 38.79, "m3": 32.33, "m6": 14.62, "y1": null}, "ret_off": {"w1": 12.48, "m1": -3.02, "m3": -19.17, "m6": -63.45, "y1": null}, "ret_fdc": {"w1": 5.26, "m1": -9.24, "m3": -24.36, "m6": -65.79, "y1": null}, "exc_spx_f": {"w1": 4.58, "m1": -8.71, "m3": -29.12, "m6": -67.08, "y1": null}, "exc_ndx_f": {"w1": 3.33, "m1": -10.2, "m3": -31.42, "m6": -68.04, "y1": null}, "exc_spx_o": {"w1": 11.8, "m1": -2.49, "m3": -23.93, "m6": -64.74, "y1": null}, "exc_ndx_o": {"w1": 10.55, "m1": -3.98, "m3": -26.23, "m6": -65.7, "y1": null}, "last": 17.47, "life_off": -56.33, "life_fdc": -59.12, "days": 266}, {"ticker": "FIGR", "name": "Figure Technology", "date": "2025-09-11", "year": 2025, "sector": "Fintech", "structure": "IPO", "region": "US", "capB": 5, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 25.0, "fdc": 31.11, "pop": 24.44, "prices": {"w1": 43.17, "m1": 42.25, "m3": 42.05, "m6": 36.14, "y1": null}, "ret_off": {"w1": 72.7, "m1": 69.0, "m3": 68.2, "m6": 44.56, "y1": null}, "ret_fdc": {"w1": 38.78, "m1": 35.81, "m3": 35.17, "m6": 16.17, "y1": null}, "exc_spx_f": {"w1": 38.1, "m1": 36.34, "m3": 30.41, "m6": 14.88, "y1": null}, "exc_ndx_f": {"w1": 36.85, "m1": 34.85, "m3": 28.11, "m6": 13.92, "y1": null}, "exc_spx_o": {"w1": 72.02, "m1": 69.53, "m3": 63.44, "m6": 43.27, "y1": null}, "exc_ndx_o": {"w1": 70.77, "m1": 68.04, "m3": 61.14, "m6": 42.31, "y1": null}, "last": 31.32, "life_off": 25.28, "life_fdc": 0.68, "days": 266}, {"ticker": "GEMI", "name": "Gemini", "date": "2025-09-12", "year": 2025, "sector": "Crypto", "structure": "IPO", "region": "US", "capB": 3.3, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 28.0, "fdc": 32.0, "pop": 14.29, "prices": {"w1": 24.14, "m1": 23.3, "m3": 13.22, "m6": 7.76, "y1": null}, "ret_off": {"w1": -13.79, "m1": -16.79, "m3": -52.79, "m6": -72.3, "y1": null}, "ret_fdc": {"w1": -24.56, "m1": -27.19, "m3": -58.69, "m6": -75.77, "y1": null}, "exc_spx_f": {"w1": -25.78, "m1": -26.71, "m3": -62.38, "m6": -76.5, "y1": null}, "exc_ndx_f": {"w1": -26.78, "m1": -27.73, "m3": -63.27, "m6": -76.97, "y1": null}, "exc_spx_o": {"w1": -15.01, "m1": -16.31, "m3": -56.48, "m6": -73.03, "y1": null}, "exc_ndx_o": {"w1": -16.01, "m1": -17.33, "m3": -57.37, "m6": -73.5, "y1": null}, "last": 4.62, "life_off": -83.5, "life_fdc": -85.56, "days": 265}, {"ticker": "VIA", "name": "Via Transportation", "date": "2025-09-12", "year": 2025, "sector": "Mobility", "structure": "IPO", "region": "US", "capB": 4, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 46.0, "fdc": 49.51, "pop": 7.63, "prices": {"w1": 50.18, "m1": 46.76, "m3": 29.8, "m6": 16.68, "y1": null}, "ret_off": {"w1": 9.09, "m1": 1.65, "m3": -35.22, "m6": -63.74, "y1": null}, "ret_fdc": {"w1": 1.35, "m1": -5.55, "m3": -39.81, "m6": -66.31, "y1": null}, "exc_spx_f": {"w1": 0.13, "m1": -5.07, "m3": -43.5, "m6": -67.04, "y1": null}, "exc_ndx_f": {"w1": -0.87, "m1": -6.09, "m3": -44.39, "m6": -67.51, "y1": null}, "exc_spx_o": {"w1": 7.87, "m1": 2.13, "m3": -38.91, "m6": -64.47, "y1": null}, "exc_ndx_o": {"w1": 6.87, "m1": 1.11, "m3": -39.8, "m6": -64.94, "y1": null}, "last": 15.28, "life_off": -66.78, "life_fdc": -69.14, "days": 265}, {"ticker": "STUB", "name": "StubHub", "date": "2025-09-17", "year": 2025, "sector": "Internet/Consumer", "structure": "IPO", "region": "US", "capB": 8.5, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 23.5, "fdc": 22.0, "pop": -6.38, "prices": {"w1": 17.42, "m1": 17.15, "m3": 13.99, "m6": 6.96, "y1": null}, "ret_off": {"w1": -25.87, "m1": -27.02, "m3": -40.47, "m6": -70.38, "y1": null}, "ret_fdc": {"w1": -20.82, "m1": -22.05, "m3": -36.41, "m6": -68.36, "y1": null}, "exc_spx_f": {"w1": -21.39, "m1": -23.01, "m3": -38.24, "m6": -68.73, "y1": null}, "exc_ndx_f": {"w1": -21.98, "m1": -24.5, "m3": -38.16, "m6": -69.19, "y1": null}, "exc_spx_o": {"w1": -26.44, "m1": -27.98, "m3": -42.3, "m6": -70.75, "y1": null}, "exc_ndx_o": {"w1": -27.03, "m1": -29.47, "m3": -42.22, "m6": -71.21, "y1": null}, "last": 9.38, "life_off": -60.09, "life_fdc": -57.36, "days": 260}, {"ticker": "NTSK", "name": "Netskope", "date": "2025-09-18", "year": 2025, "sector": "Cybersecurity", "structure": "IPO", "region": "US", "capB": 7.5, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 19.0, "fdc": 22.49, "pop": 18.37, "prices": {"w1": 22.7, "m1": 22.24, "m3": 18.9, "m6": 9.49, "y1": null}, "ret_off": {"w1": 19.47, "m1": 17.05, "m3": -0.53, "m6": -50.05, "y1": null}, "ret_fdc": {"w1": 0.93, "m1": -1.11, "m3": -15.96, "m6": -57.8, "y1": null}, "exc_spx_f": {"w1": 1.34, "m1": -1.59, "m3": -18.11, "m6": -57.42, "y1": null}, "exc_ndx_f": {"w1": 1.17, "m1": -2.59, "m3": -18.27, "m6": -57.39, "y1": null}, "exc_spx_o": {"w1": 19.88, "m1": 16.57, "m3": -2.68, "m6": -49.67, "y1": null}, "exc_ndx_o": {"w1": 19.71, "m1": 15.57, "m3": -2.84, "m6": -49.64, "y1": null}, "last": 10.03, "life_off": -47.21, "life_fdc": -55.4, "days": 259}, {"ticker": "NAVN", "name": "Navan", "date": "2025-10-30", "year": 2025, "sector": "Software/SaaS", "structure": "IPO", "region": "US", "capB": 6.5, "bucket": "Sub-$10B", "tier": "Flagged sub-$10B", "status": "Active", "offer": 25.0, "fdc": 20.0, "pop": -20.0, "prices": {"w1": 17.85, "m1": 16.69, "m3": 12.66, "m6": 17.49, "y1": null}, "ret_off": {"w1": -28.6, "m1": -33.24, "m3": -49.36, "m6": -30.04, "y1": null}, "ret_fdc": {"w1": -10.75, "m1": -16.55, "m3": -36.7, "m6": -12.55, "y1": null}, "exc_spx_f": {"w1": -9.25, "m1": -16.94, "m3": -38.85, "m6": -18.22, "y1": null}, "exc_ndx_f": {"w1": -8.4, "m1": -15.38, "m3": -37.28, "m6": -19.22, "y1": null}, "exc_spx_o": {"w1": -27.1, "m1": -33.63, "m3": -51.51, "m6": -35.71, "y1": null}, "exc_ndx_o": {"w1": -26.25, "m1": -32.07, "m3": -49.94, "m6": -36.71, "y1": null}, "last": 22.26, "life_off": -10.96, "life_fdc": 11.3, "days": 217}, {"ticker": "MDLN", "name": "Medline", "date": "2025-12-17", "year": 2025, "sector": "Healthcare", "structure": "IPO", "region": "US", "capB": 57, "bucket": "Mega ($40B+)", "tier": "Core (>=$10B)", "status": "Active", "offer": 29.0, "fdc": 41.0, "pop": 41.38, "prices": {"w1": 44.28, "m1": 44.12, "m3": 42.26, "m6": null, "y1": null}, "ret_off": {"w1": 52.69, "m1": 52.14, "m3": 45.72, "m6": null, "y1": null}, "ret_fdc": {"w1": 8.0, "m1": 7.61, "m3": 3.07, "m6": null, "y1": null}, "exc_spx_f": {"w1": 4.87, "m1": 4.36, "m3": 4.51, "m6": null, "y1": null}, "exc_ndx_f": {"w1": 3.91, "m1": 4.03, "m3": 3.97, "m6": null, "y1": null}, "exc_spx_o": {"w1": 49.56, "m1": 48.89, "m3": 47.16, "m6": null, "y1": null}, "exc_ndx_o": {"w1": 48.6, "m1": 48.56, "m3": 46.62, "m6": null, "y1": null}, "last": 34.45, "life_off": 18.79, "life_fdc": -15.98, "days": 169}]};
+const MARQUEE = new Set(['COIN','SNOW','ABNB','RIVN','ARM','RDDT','CRWV','CRCL','FIG','PLTR','UBER','HOOD','KLAR','CPNG','NU']);
+
+/* ---------------- i18n ---------------- */
+const SEC_TC={'AI/ML':'人工智慧/ML','Crypto':'加密貨幣','Fintech':'金融科技','Software/SaaS':'軟體/SaaS','Cybersecurity':'網路安全','Semiconductors':'半導體','Data/Analytics':'數據/分析','Internet/Consumer':'網路/消費','Gaming':'遊戲','Mobility':'出行','E-commerce':'電子商務','Healthcare':'醫療保健','EV/Auto':'電動車/汽車','Energy':'能源','Travel/Leisure':'旅遊/休閒','Financials':'金融','Industrials/Other':'工業/其他'};
+const BKT_TC={'Mega ($40B+)':'超大型 (≥$400億)','Large ($10-40B)':'大型 ($100–400億)','Sub-$10B':'小型 (<$100億)'};
+const STR_TC={'IPO':'傳統IPO','Direct':'直接上市'};
+const STA_TC={'Active':'交易中','Delisted':'已下市','Acquired':'被收購'};
+const I={
+ en:{title:'US Mega-Cap IPO Performance',sub:'5-Year Lookback · Pre-IPO research for SpaceX · Anthropic · OpenAI',
+  lkh:'IPO Performance Terminal',lkp:'Protected research dashboard. Enter access code to continue.',unlock:'Unlock',wrong:'Incorrect access code',
+  asof:'As of',ipos:'IPOs',method:'Methodology',
+  ch:'The precedent gap',
+  cp:`SpaceX (~$1.75T), OpenAI (~$500–730B) and Anthropic will list far above any precedent in this set. The largest comp here — <b>Coinbase (~$85B at reference)</b> — is roughly <b>20× smaller</b> than SpaceX, itself set to be the biggest IPO ever. Only the <b>$40B+ "super-cap" cohort (11 names)</b> offers even thin guidance for the very top of the range; below that, the <b>vintage</b> and <b>pop-and-fade</b> patterns are the more reliable read. The class of 2021 is the cautionary base case.`,
+  base:'Baseline',foff:'From Offer',ffdc:'From 1st-Day Close',metric:'Metric',raw:'Raw',espx:'Excess vs SPX',endx:'Excess vs NDX',
+  chz:'Chart horizon',csv:'Export CSV',vintage:'Vintage',tier:'Tier',sector:'Sector',size:'Size',struct:'Structure',all:'All',
+  cohort:'Cohort medians by vintage',cohorth:'Median return per IPO class — the core signal',
+  psector:'By sector',psectorh:'Median at selected horizon',pbucket:'By IPO size',pbucketh:'Does scale protect you?',
+  pscatter:'Day-1 pop vs forward return',pscatterh:'Does the first-day pop predict the fade?',
+  ptable:'All IPOs',hint:'↔ scroll for all horizons · click any row for full detail',
+  kIpos:'IPOs in sample',kPop:'Median day-1 pop',k1yO:'Median 1Y · from offer',k1yF:'Median 1Y · from 1st-day',kPos:'Positive at 1Y',kBelow:'Below offer today',
+  cTk:'Ticker',cNm:'Company',cDt:'IPO date',cSec:'Sector',cStr:'Type',cCap:'Cap $B',cOff:'Offer',cFdc:'1st-day',cPop:'Day-1',cLife:'Since IPO',
+  mFrom:'From',price:'Price',exSpx:'Exc. SPX',exNdx:'Exc. NDX',horizon:'Horizon',perf:'Performance across horizons',
+  mOffer:'Offer price',mFdc:'1st-day close',mPop:'Day-1 pop',mLife:'Since IPO',mIpo:'IPO',mCap:'Mkt cap at IPO',
+  disc:'Not investment advice. Returns are price-only (split-adjusted, dividend-unadjusted). Past IPO behaviour is not predictive of any specific future listing — and the SpaceX/OpenAI/Anthropic valuations sit far outside this sample. Verify all figures independently.',
+  foot:'Prices: Yahoo Finance · Offer prices: company filings/press',
+  methtitle:'Methodology & data notes',
+  yes:'Yes',pend:'pending'},
+ tc:{title:'美股大型IPO上市後表現',sub:'五年回溯 · 為 SpaceX · Anthropic · OpenAI 上市前研究',
+  lkh:'IPO 表現終端機',lkp:'受保護的研究儀表板，請輸入存取碼。',unlock:'解鎖',wrong:'存取碼錯誤',
+  asof:'資料截至',ipos:'檔IPO',method:'方法說明',
+  ch:'先例缺口',
+  cp:`SpaceX(約1.75兆美元)、OpenAI(約5,000–7,300億美元)與 Anthropic 的上市規模將遠超本資料集中的任何先例。此處最大的可比公司 <b>Coinbase(參考價約850億美元)</b> 仍比 SpaceX 小約 <b>20 倍</b>,而 SpaceX 本身可能成為史上最大 IPO。僅 <b>$400億以上的「超大型」組別(11 檔)</b> 能為區間最頂端提供有限參考;其下,<b>年度組別</b> 與 <b>「首日衝高後回落」</b> 型態才是較可靠的判讀依據。2021 年班底是需要警惕的基準情境。`,
+  base:'基準',foff:'自發行價',ffdc:'自首日收盤',metric:'指標',raw:'原始',espx:'超額(對SPX)',endx:'超額(對NDX)',
+  chz:'圖表期間',csv:'匯出CSV',vintage:'年度',tier:'分層',sector:'行業',size:'規模',struct:'結構',all:'全部',
+  cohort:'各年度中位數報酬',cohorth:'各 IPO 年度的中位數報酬 — 核心訊號',
+  psector:'按行業',psectorh:'所選期間之中位數',pbucket:'按上市規模',pbucketh:'規模能否提供保護?',
+  pscatter:'首日漲幅 vs 後續報酬',pscatterh:'首日衝高能否預測後續回落?',
+  ptable:'全部 IPO',hint:'↔ 左右捲動查看所有期間 · 點擊任一列查看完整細節',
+  kIpos:'樣本 IPO 數',kPop:'首日漲幅中位數',k1yO:'1年報酬中位數 · 自發行價',k1yF:'1年報酬中位數 · 自首日',kPos:'1年正報酬比例',kBelow:'現價低於發行價',
+  cTk:'代碼',cNm:'公司',cDt:'上市日',cSec:'行業',cStr:'類型',cCap:'市值$B',cOff:'發行價',cFdc:'首日',cPop:'首日',cLife:'上市以來',
+  mFrom:'相對',price:'價格',exSpx:'超額SPX',exNdx:'超額NDX',horizon:'期間',perf:'各期間表現',
+  mOffer:'發行價',mFdc:'首日收盤',mPop:'首日漲幅',mLife:'上市以來',mIpo:'上市',mCap:'上市時市值',
+  disc:'非投資建議。報酬為純價格報酬(經拆股調整、未經股息調整)。過往 IPO 行為無法預測任何特定的未來上市案 — 且 SpaceX/OpenAI/Anthropic 的估值遠超本樣本範圍。所有數據請自行驗證。',
+  foot:'價格:Yahoo Finance · 發行價:公司申報文件/新聞稿',
+  methtitle:'方法與數據註記',
+  yes:'是',pend:'未滿'}
+};
+let L='en';
+const t=k=>I[L][k];
+const secName=s=>L==='tc'?(SEC_TC[s]||s):s;
+const bktName=b=>L==='tc'?(BKT_TC[b]||b):b;
+const strName=s=>L==='tc'?(STR_TC[s]||s):s;
+const staName=s=>L==='tc'?(STA_TC[s]||s):s;
+
+/* ---------------- state ---------------- */
+const HZ=['w1','m1','m3','m6','y1'];
+const HZLBL={w1:'1W',m1:'1M',m3:'3M',m6:'6M',y1:'1Y'};
+let baseline='off', metric='raw', chz='y1';
+let fYears=new Set(), fTiers=new Set(), fSector='', fBucket='', fStruct='';
+let sortKey='date', sortDir=-1;
+
+const yearColor={2019:'#58A6FF',2020:'#10B981',2021:'#F23645',2022:'#F0B429',2023:'#A78BFA',2024:'#34D399',2025:'#FB923C'};
+
+/* ---------------- helpers ---------------- */
+function retField(){ // returns the row property name for current baseline+metric
+  if(metric==='raw') return baseline==='off'?'ret_off':'ret_fdc';
+  if(metric==='spx') return baseline==='off'?'exc_spx_o':'exc_spx_f';
+  return baseline==='off'?'exc_ndx_o':'exc_ndx_f';
+}
+const getRet=(row,hz)=>{const o=row[retField()];return o?o[hz]:null;};
+const lifeVal=row=>baseline==='off'?row.life_off:row.life_fdc;
+function median(arr){const v=arr.filter(x=>x!=null).sort((a,b)=>a-b);if(!v.length)return null;const m=Math.floor(v.length/2);return v.length%2?v[m]:(v[m-1]+v[m])/2;}
+function fmt(v,dp){if(v==null)return '—';const a=Math.abs(v);const d=dp!=null?dp:(a>=100?0:1);return (v>0?'+':'')+v.toFixed(d)+'%';}
+function fmtNum(v){if(v==null)return '—';return v>=100?v.toFixed(0):v.toFixed(2);}
+function tier(v){if(v==null)return '';const a=Math.abs(v);const s=v>0?'p':'n';if(a<2)return 'z0';if(a<15)return s+'1';if(a<40)return s+'2';if(a<100)return s+'3';return s+'4';}
+
+function filtered(){
+  return DATA.rows.filter(r=>{
+    if(fYears.size&&!fYears.has(r.year))return false;
+    if(fTiers.size&&!fTiers.has(r.tier))return false;
+    if(fSector&&r.sector!==fSector)return false;
+    if(fBucket&&r.bucket!==fBucket)return false;
+    if(fStruct&&r.structure!==fStruct)return false;
+    return true;
+  });
+}
+
+/* ---------------- SHA-256 gate ---------------- */
+const HASH='bebc79734038e684e2d9bd00f8a0bcebb96fbffbdb699ffd076732806fe1cde0';
+async function sha256(s){const b=new TextEncoder().encode(s);const h=await crypto.subtle.digest('SHA-256',b);return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function tryUnlock(){
+  const v=document.getElementById('pw').value;
+  const h=await sha256(v);
+  if(h===HASH){document.getElementById('lock').style.display='none';document.getElementById('app').hidden=false;boot();}
+  else{document.getElementById('lkerr').textContent=t('wrong');document.getElementById('pw').value='';}
+}
+document.getElementById('pwbtn').addEventListener('click',tryUnlock);
+document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock();});
+document.getElementById('lang-en').addEventListener('click',()=>setLang('en'));
+document.getElementById('lang-tc').addEventListener('click',()=>setLang('tc'));
+function setLang(l){L=l;document.getElementById('lang-en').classList.toggle('on',l==='en');document.getElementById('lang-tc').classList.toggle('on',l==='tc');document.documentElement.lang=l==='tc'?'zh-Hant':'en';if(!document.getElementById('app').hidden)renderAll();}
+/* ---------------- text binding ---------------- */
+function applyText(){
+  const set=(id,k,html)=>{const e=document.getElementById(id);if(e){if(html)e.innerHTML=t(k);else e.textContent=t(k);}};
+  set('lk-h','lkh');set('lk-p','lkp');set('pwbtn','unlock');
+  set('t-title','title');set('t-sub','sub');set('t-methodlbl','method');
+  set('c-h','ch');set('c-p','cp',true);
+  set('cl-base','base');set('sb-off','foff');set('sb-fdc','ffdc');
+  set('cl-metric','metric');set('sm-raw','raw');set('sm-spx','espx');set('sm-ndx','endx');
+  set('cl-hz','chz');set('t-csv','csv');
+  set('cl-vintage','vintage');set('cl-tier','tier');set('cl-sector','sector');set('cl-size','size');set('cl-struct','struct');
+  set('p-cohort','cohort');set('p-cohort-h','cohorth');set('p-sector','psector');set('p-sector-h','psectorh');
+  set('p-bucket','pbucket');set('p-bucket-h','pbucketh');set('p-scatter','pscatter');set('p-scatter-h','pscatterh');
+  set('p-table','ptable');set('t-hint','hint');set('t-disc','disc');set('t-foot','foot');
+  document.getElementById('t-asof').innerHTML=t('asof')+' <b>'+DATA.asof+'</b>';
+  document.getElementById('t-n').innerHTML='<b>'+DATA.n+'</b> '+t('ipos');
+}
+
+/* ---------------- KPIs ---------------- */
+function renderKPIs(){
+  const f=filtered();
+  const medPop=median(f.map(r=>r.pop));
+  const m1o=median(f.map(r=>r.ret_off.y1));
+  const m1f=median(f.map(r=>r.ret_fdc.y1));
+  const has1y=f.filter(r=>r.ret_fdc.y1!=null);
+  const pos1y=has1y.length?Math.round(100*has1y.filter(r=>r.ret_fdc.y1>0).length/has1y.length):null;
+  const below=f.length?Math.round(100*f.filter(r=>r.last<r.offer).length/f.length):0;
+  const ncore=f.filter(r=>r.tier.startsWith('Core')).length;
+  const sgn=v=>v==null?'':(v>0?'pos':'neg');
+  const cards=[
+    {c:'',l:t('kIpos'),v:f.length,x:ncore+' core · '+(f.length-ncore)+' flagged'},
+    {c:medPop>0?'g':'r',l:t('kPop'),v:fmt(medPop),x:'n='+f.filter(r=>r.pop!=null).length,vc:sgn(medPop)},
+    {c:m1o>0?'g':'r',l:t('k1yO'),v:fmt(m1o),x:'incl. day-1 pop',vc:sgn(m1o)},
+    {c:m1f>0?'g':'r',l:t('k1yF'),v:fmt(m1f),x:'post-open',vc:sgn(m1f)},
+    {c:'a',l:t('kPos'),v:pos1y==null?'—':pos1y+'%',x:'of '+has1y.length+' w/ 1Y'},
+    {c:below>50?'r':'p',l:t('kBelow'),v:below+'%',x:'last < offer',vc:below>50?'neg':''}
+  ];
+  document.getElementById('kpis').innerHTML=cards.map(k=>`<div class="kpi ${k.c}"><div class="l">${k.l}</div><div class="v ${k.vc||''}">${k.v}</div><div class="x">${k.x}</div></div>`).join('');
+}
+
+/* ---------------- controls ---------------- */
+function renderControls(){
+  const years=[...new Set(DATA.rows.map(r=>r.year))].sort();
+  document.getElementById('chips-year').innerHTML=years.map(y=>`<button class="chip ${fYears.has(y)?'on':''}" data-y="${y}">${y}</button>`).join('');
+  document.querySelectorAll('#chips-year .chip').forEach(c=>c.onclick=()=>{const y=+c.dataset.y;fYears.has(y)?fYears.delete(y):fYears.add(y);renderAll();});
+  const tiers=[['Core (>=$10B)',L==='tc'?'核心 ≥$100億':'Core ≥$10B'],['Flagged sub-$10B',L==='tc'?'標記 <$100億':'Flagged <$10B']];
+  document.getElementById('chips-tier').innerHTML=tiers.map(([v,lbl])=>`<button class="chip ${fTiers.has(v)?'on':''}" data-t="${v}">${lbl}</button>`).join('');
+  document.querySelectorAll('#chips-tier .chip').forEach(c=>c.onclick=()=>{const v=c.dataset.t;fTiers.has(v)?fTiers.delete(v):fTiers.add(v);renderAll();});
+  const secs=[...new Set(DATA.rows.map(r=>r.sector))].sort();
+  const ssel=document.getElementById('sel-sector');
+  ssel.innerHTML=`<option value="">${t('all')}</option>`+secs.map(s=>`<option value="${s}" ${fSector===s?'selected':''}>${secName(s)}</option>`).join('');
+  ssel.onchange=()=>{fSector=ssel.value;renderAll();};
+  const order=['Mega ($40B+)','Large ($10-40B)','Sub-$10B'].filter(b=>DATA.rows.some(r=>r.bucket===b));
+  const bsel=document.getElementById('sel-bucket');
+  bsel.innerHTML=`<option value="">${t('all')}</option>`+order.map(b=>`<option value="${b}" ${fBucket===b?'selected':''}>${bktName(b)}</option>`).join('');
+  bsel.onchange=()=>{fBucket=bsel.value;renderAll();};
+  const stsel=document.getElementById('sel-struct');
+  stsel.innerHTML=`<option value="">${t('all')}</option>`+['IPO','Direct'].map(s=>`<option value="${s}" ${fStruct===s?'selected':''}>${strName(s)}</option>`).join('');
+  stsel.onchange=()=>{fStruct=stsel.value;renderAll();};
+  // seg states
+  document.querySelectorAll('#seg-base button').forEach(b=>b.classList.toggle('on',b.dataset.v===baseline));
+  document.querySelectorAll('#seg-metric button').forEach(b=>b.classList.toggle('on',b.dataset.v===metric));
+  document.querySelectorAll('#seg-hz button').forEach(b=>b.classList.toggle('on',b.dataset.v===chz));
+}
+
+/* ---------------- heatmap ---------------- */
+function renderHeatmap(){
+  const f=filtered();
+  const years=[...new Set(f.map(r=>r.year))].sort();
+  let h='<thead><tr><th class="yr"></th>'+HZ.map(hz=>`<th>${HZLBL[hz]}</th>`).join('')+'</tr></thead><tbody>';
+  if(!years.length)h+=`<tr><td class="yr na" colspan="6">—</td></tr>`;
+  years.forEach(y=>{
+    const yr=f.filter(r=>r.year===y);
+    h+=`<tr><td class="yr">${y} <span style="color:var(--tx4)">·${yr.length}</span></td>`;
+    HZ.forEach(hz=>{
+      const vals=yr.map(r=>getRet(r,hz));
+      const m=median(vals);const n=vals.filter(x=>x!=null).length;
+      if(m==null){h+=`<td class="na">—</td>`;}
+      else h+=`<td class="${tier(m)}">${fmt(m,0)}<span class="n">n=${n}</span></td>`;
+    });
+    h+='</tr>';
+  });
+  document.getElementById('heatmap').innerHTML=h+'</tbody>';
+}
+
+/* ---------------- bars ---------------- */
+function barRows(items){
+  const maxAbs=Math.max(5,...items.map(i=>Math.abs(i.med||0)));
+  return items.map(i=>{
+    const m=i.med;const w=m==null?0:Math.min(50,Math.abs(m)/maxAbs*50);
+    const fill=m==null?'':(m>0?`<div class="bf pos" style="width:${w}%"></div>`:`<div class="bf neg" style="width:${w}%"></div>`);
+    const vc=m==null?'z0':(m>0?'pos':'neg');
+    return `<div class="bar"><div class="bl">${i.label} <span class="bn">${i.n}</span></div><div class="bt"><div class="bzero"></div>${fill}</div><div class="bv ${vc}">${fmt(m)}</div></div>`;
+  }).join('');
+}
+function renderBarsSector(){
+  const f=filtered();
+  const secs=[...new Set(f.map(r=>r.sector))];
+  const items=secs.map(s=>{const rows=f.filter(r=>r.sector===s);const vals=rows.map(r=>getRet(r,chz));return{label:secName(s),med:median(vals),n:vals.filter(x=>x!=null).length};}).filter(i=>i.n>0).sort((a,b)=>(b.med??-1e9)-(a.med??-1e9));
+  document.getElementById('bars-sector').innerHTML=items.length?barRows(items):'<div style="color:var(--tx4);font-size:12px">—</div>';
+}
+function renderBarsBucket(){
+  const f=filtered();
+  const order=['Mega ($40B+)','Large ($10-40B)','Sub-$10B'];
+  const items=order.map(b=>{const rows=f.filter(r=>r.bucket===b);if(!rows.length)return null;const vals=rows.map(r=>getRet(r,chz));return{label:bktName(b),med:median(vals),n:vals.filter(x=>x!=null).length};}).filter(Boolean).filter(i=>i.n>0);
+  document.getElementById('bars-bucket').innerHTML=items.length?barRows(items):'<div style="color:var(--tx4);font-size:12px">—</div>';
+}
+
+/* ---------------- scatter ---------------- */
+function renderScatter(){
+  const f=filtered().filter(r=>r.pop!=null&&getRet(r,chz)!=null);
+  const svg=document.getElementById('scatter');
+  const W=1100,H=360,ml=64,mr=24,mt=20,mb=44;
+  const xs=f.map(r=>r.pop), ys=f.map(r=>getRet(r,chz));
+  if(!f.length){svg.innerHTML=`<text x="${W/2}" y="${H/2}" fill="var(--tx4)" font-size="13" text-anchor="middle" font-family="Inter">No data for current filters</text>`;document.getElementById('scleg').innerHTML='';return;}
+  let xmin=Math.min(0,...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys);
+  const xp=(xmax-xmin)*.06||5,yp=(ymax-ymin)*.08||5;xmin-=xp;xmax+=xp;ymin-=yp;ymax+=yp;
+  const sx=v=>ml+(v-xmin)/(xmax-xmin)*(W-ml-mr);
+  const sy=v=>H-mb-(v-ymin)/(ymax-ymin)*(H-mt-mb);
+  let g='';
+  // grid + ticks
+  for(let i=0;i<=4;i++){const xv=xmin+(xmax-xmin)*i/4;const X=sx(xv);g+=`<line x1="${X}" y1="${mt}" x2="${X}" y2="${H-mb}" stroke="#1a212c" stroke-width="1"/><text x="${X}" y="${H-mb+16}" fill="var(--tx3)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">${xv>0?'+':''}${xv.toFixed(0)}%</text>`;}
+  for(let i=0;i<=4;i++){const yv=ymin+(ymax-ymin)*i/4;const Y=sy(yv);g+=`<line x1="${ml}" y1="${Y}" x2="${W-mr}" y2="${Y}" stroke="#1a212c" stroke-width="1"/><text x="${ml-8}" y="${Y+3}" fill="var(--tx3)" font-size="10" text-anchor="end" font-family="JetBrains Mono">${yv>0?'+':''}${yv.toFixed(0)}%</text>`;}
+  // zero lines
+  if(0>xmin&&0<xmax){const X=sx(0);g+=`<line x1="${X}" y1="${mt}" x2="${X}" y2="${H-mb}" stroke="#3a4658" stroke-width="1.2" stroke-dasharray="3,3"/>`;}
+  if(0>ymin&&0<ymax){const Y=sy(0);g+=`<line x1="${ml}" y1="${Y}" x2="${W-mr}" y2="${Y}" stroke="#3a4658" stroke-width="1.2" stroke-dasharray="3,3"/>`;}
+  // quadrant hint: high pop + negative
+  if(0>ymin&&0<ymax&&xmax>0){g+=`<text x="${W-mr-6}" y="${sy(ymin)-8}" fill="rgba(242,54,69,.5)" font-size="10.5" text-anchor="end" font-family="Inter" font-style="italic">${L==='tc'?'衝高後回落':'pop & fade'} ↘</text>`;}
+  // axis titles
+  g+=`<text x="${(ml+W-mr)/2}" y="${H-4}" fill="var(--tx2)" font-size="11" text-anchor="middle" font-family="Inter">${L==='tc'?'首日漲幅(相對發行價) %':'Day-1 pop (vs offer) %'}</text>`;
+  const ytl=`${HZLBL[chz]} ${metric==='raw'?(L==='tc'?'報酬':'return'):(metric==='spx'?'exc. SPX':'exc. NDX')} · ${baseline==='off'?(L==='tc'?'自發行價':'from offer'):(L==='tc'?'自首日':'from 1st-day')}`;
+  g+=`<text transform="translate(14,${(mt+H-mb)/2}) rotate(-90)" fill="var(--tx2)" font-size="11" text-anchor="middle" font-family="Inter">${ytl}</text>`;
+  // points
+  f.forEach(r=>{const X=sx(r.pop),Y=sy(getRet(r,chz));const c=yearColor[r.year]||'#888';const mq=MARQUEE.has(r.ticker);
+    g+=`<circle cx="${X}" cy="${Y}" r="${mq?6:4.5}" fill="${c}" fill-opacity="${mq?.95:.72}" stroke="${mq?'#fff':c}" stroke-width="${mq?1.3:.5}" stroke-opacity="${mq?.85:.4}" data-tk="${r.ticker}" class="scpt" style="cursor:pointer"/>`;
+    if(mq)g+=`<text x="${X+8}" y="${Y+3}" fill="var(--tx2)" font-size="9.5" font-family="JetBrains Mono">${r.ticker}</text>`;
+  });
+  svg.innerHTML=g;
+  // legend
+  const years=[...new Set(f.map(r=>r.year))].sort();
+  document.getElementById('scleg').innerHTML=years.map(y=>`<div class="li"><span class="sw" style="background:${yearColor[y]}"></span>${y}</div>`).join('')+`<div class="li" style="margin-left:8px"><span class="sw" style="background:#fff;width:7px;height:7px"></span>${L==='tc'?'重點名稱':'marquee'}</div>`;
+  // hover
+  const tip=document.getElementById('sctip');
+  svg.querySelectorAll('.scpt').forEach(pt=>{
+    pt.addEventListener('mousemove',e=>{const r=DATA.rows.find(x=>x.ticker===pt.dataset.tk);tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
+      tip.innerHTML=`<div class="t" style="color:${yearColor[r.year]}">${r.ticker} · ${r.name}</div><div class="r">${L==='tc'?'首日':'Day-1'}: ${fmt(r.pop)} &nbsp; ${HZLBL[chz]}: ${fmt(getRet(r,chz))}</div><div class="r" style="color:var(--tx3)">${secName(r.sector)} · ${r.date}</div>`;});
+    pt.addEventListener('mouseleave',()=>tip.style.display='none');
+    pt.addEventListener('click',()=>openCompany(pt.dataset.tk));
+  });
+}
+/* ---------------- table ---------------- */
+function colVal(r,k){
+  if(k==='ticker')return r.ticker;if(k==='name')return r.name;if(k==='date')return r.date;
+  if(k==='sector')return r.sector;if(k==='capB')return r.capB;if(k==='offer')return r.offer;
+  if(k==='fdc')return r.fdc;if(k==='pop')return r.pop;if(k==='life')return lifeVal(r);
+  if(HZ.includes(k))return getRet(r,k);return '';
+}
+function renderTable(){
+  const f=filtered();
+  const cols=[
+    {k:'ticker',l:t('cTk'),cls:'l'},{k:'name',l:t('cNm'),cls:'l'},{k:'date',l:t('cDt'),cls:'l'},
+    {k:'sector',l:t('cSec'),cls:'l'},{k:'capB',l:t('cCap')},{k:'offer',l:t('cOff')},{k:'fdc',l:t('cFdc')},
+    {k:'pop',l:t('cPop')},...HZ.map(h=>({k:h,l:HZLBL[h]})),{k:'life',l:t('cLife')}
+  ];
+  document.getElementById('dthead').innerHTML='<tr>'+cols.map(c=>`<th class="${c.cls||''}" data-k="${c.k}">${c.l}${sortKey===c.k?` <span class="ar">${sortDir>0?'▲':'▼'}</span>`:''}</th>`).join('')+'</tr>';
+  document.querySelectorAll('#dthead th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=(k==='ticker'||k==='name'||k==='sector')?1:-1;}renderTable();});
+  const sorted=[...f].sort((a,b)=>{
+    let x=colVal(a,sortKey),y=colVal(b,sortKey);
+    if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;
+    if(typeof x==='string')return x.localeCompare(y)*sortDir;
+    return (x-y)*sortDir;
+  });
+  const tagCls={IPO:'ipo',Direct:'dir'};
+  const stTag=r=>{if(r.status==='Delisted')return `<span class="tag del">${L==='tc'?'下市':'Delisted'}</span>`;if(r.status==='Acquired')return `<span class="tag acq">${L==='tc'?'收購':'Acq'}</span>`;return '';};
+  document.getElementById('dtbody').innerHTML=sorted.map(r=>{
+    const cells=HZ.map(h=>{const v=getRet(r,h);return `<td class="cell ${tier(v)}">${fmt(v)}</td>`;}).join('');
+    return `<tr data-tk="${r.ticker}">
+      <td class="l"><span class="tk">${r.ticker}</span>${MARQUEE.has(r.ticker)?'<span class="star">★</span>':''}</td>
+      <td class="l"><span class="nm">${r.name}</span> ${stTag(r)}</td>
+      <td class="l mono" style="color:var(--tx3);font-size:11.5px">${r.date}</td>
+      <td class="l"><span class="sec">${secName(r.sector)}</span></td>
+      <td>${r.capB>=10?r.capB.toFixed(0):r.capB.toFixed(1)}</td>
+      <td style="color:var(--tx2)">$${r.offer.toFixed(2)}</td>
+      <td style="color:var(--tx2)">$${r.fdc.toFixed(2)}</td>
+      <td class="cell ${tier(r.pop)}">${fmt(r.pop)}</td>
+      ${cells}
+      <td class="cell ${tier(lifeVal(r))}">${fmt(lifeVal(r))}</td>
+    </tr>`;
+  }).join('');
+  document.querySelectorAll('#dtbody tr').forEach(tr=>tr.onclick=()=>openCompany(tr.dataset.tk));
+  const mlabel=(baseline==='off'?t('foff'):t('ffdc'))+' · '+(metric==='raw'?t('raw'):metric==='spx'?t('espx'):t('endx'));
+  document.getElementById('tcount').innerHTML=`${sorted.length} ${L==='tc'?'檔':'shown'} · <span style="color:var(--tx2)">${mlabel}</span>`;
+}
+
+/* ---------------- CSV ---------------- */
+function exportCSV(){
+  const f=filtered();
+  const sorted=[...f].sort((a,b)=>{let x=colVal(a,sortKey),y=colVal(b,sortKey);if(x==null)return 1;if(y==null)return -1;if(typeof x==='string')return x.localeCompare(y)*sortDir;return (x-y)*sortDir;});
+  const sfx=`${baseline}_${metric}`;
+  const head=['Ticker','Name','IPO_Date','Year','Sector','Structure','Region','Status','Cap_B','Bucket','Offer','FirstDayClose','Day1Pop_pct',...HZ.map(h=>`${HZLBL[h]}_${sfx}_pct`),`SinceIPO_${baseline}_pct`];
+  const lines=[head.join(',')];
+  sorted.forEach(r=>{
+    const row=[r.ticker,'"'+r.name.replace(/"/g,'""')+'"',r.date,r.year,r.sector,r.structure,r.region,r.status,r.capB,'"'+r.bucket+'"',r.offer,r.fdc,r.pop??'',...HZ.map(h=>{const v=getRet(r,h);return v==null?'':v;}),lifeVal(r)??''];
+    lines.push(row.join(','));
+  });
+  const blob=new Blob([lines.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ipo_performance_${sfx}_${DATA.asof}.csv`;a.click();
+}
+
+/* ---------------- company modal ---------------- */
+function openCompany(tk){
+  const r=DATA.rows.find(x=>x.ticker===tk);if(!r)return;
+  const tags=[
+    `${r.year}`,secName(r.sector),strName(r.structure),bktName(r.bucket),
+    r.region==='Intl'?(L==='tc'?'國際':'International'):(L==='tc'?'美國':'US'),staName(r.status)
+  ].map(x=>`<span class="pill">${x}</span>`).join('');
+  const stat=(l,v,vc)=>`<div class="s"><div class="l">${l}</div><div class="v ${vc||''}">${v}</div></div>`;
+  let mtab=`<table class="mtab"><thead><tr><th class="l">${t('horizon')}</th><th>${t('price')}</th><th>${t('foff')}</th><th>${t('ffdc')}</th><th>${t('exSpx')}</th><th>${t('exNdx')}</th></tr></thead><tbody>`;
+  HZ.forEach(h=>{
+    const p=r.prices[h],ro=r.ret_off[h],rf=r.ret_fdc[h],es=r.exc_spx_f[h],en=r.exc_ndx_f[h];
+    mtab+=`<tr><td class="l">${HZLBL[h]}</td><td style="color:var(--tx2)">${p!=null?'$'+fmtNum(p):'<span style="color:var(--tx4);font-style:italic">'+t('pend')+'</span>'}</td>
+      <td class="${tier(ro)}">${fmt(ro)}</td><td class="${tier(rf)}">${fmt(rf)}</td><td class="${tier(es)}">${fmt(es)}</td><td class="${tier(en)}">${fmt(en)}</td></tr>`;
+  });
+  mtab+='</tbody></table>';
+  const popNote=r.structure==='Direct'?(L==='tc'?' (相對參考價)':' (vs reference)'):'';
+  document.getElementById('m1').innerHTML=`
+    <div class="mhead"><div class="mtitle"><span class="tk2" style="color:${yearColor[r.year]}">${r.ticker}</span><span class="nm2">${r.name}</span>${MARQUEE.has(r.ticker)?'<span class="star" style="font-size:12px">★</span>':''}</div><button class="x" onclick="closeOv()">×</button></div>
+    <div class="mbody">
+      <div class="mmeta">${tags}</div>
+      <div class="mstat">
+        ${stat(t('mOffer')+(r.structure==='Direct'?'*':''),'$'+r.offer.toFixed(2))}
+        ${stat(t('mFdc'),'$'+r.fdc.toFixed(2))}
+        ${stat(t('mPop')+popNote,fmt(r.pop),r.pop>0?'pos':'neg')}
+        ${stat(t('mLife'),fmt(lifeVal(r)),lifeVal(r)>0?'pos':'neg')}
+      </div>
+      <div class="msec"><h4>${t('perf')}</h4>${mtab}</div>
+      <div style="font-size:11px;color:var(--tx4);margin-top:14px;font-family:var(--mono)">${t('mIpo')}: ${r.date} · ${r.days} ${L==='tc'?'天交易':'days public'} · ${t('mCap')}: ~$${r.capB}B${r.structure==='Direct'?' &nbsp;·&nbsp; *'+(L==='tc'?'直接上市:以交易所參考價代替發行價':'direct listing: exchange reference price used as offer'):''}</div>
+    </div>`;
+  document.getElementById('ov1').classList.add('show');
+}
+function closeOv(){document.getElementById('ov1').classList.remove('show');document.getElementById('ov2').classList.remove('show');}
+
+/* ---------------- methodology modal ---------------- */
+function methodsHTML(){
+  if(L==='tc')return `<div class="notes">
+    <p><b>研究目的。</b>本儀表板回溯 2019–2025 年美股大型 IPO 的上市後表現,為 SpaceX、Anthropic、OpenAI 等即將到來的超大型 IPO 提供行為參考。重點在於型態:首日衝高後是否回落、何時觸底、鎖倉解禁壓力。</p>
+    <p><b>樣本。</b>67 檔於 NYSE/NASDAQ 上市的公司。<b>核心</b>=上市時市值 ≥$100 億;另納入<b>標記</b>的具代表性小型 AI/加密/科技/軟體名稱(Reddit、Astera、Circle、Klaviyo、Rubrik 等)。排除 SPAC/de-SPAC。</p>
+    <p><b>期間與報酬。</b>各期間為上市日(T0)+{7,30,91,182,365} 日曆天,取不晚於目標日的最後交易日收盤。報酬以兩種基準計算:<b>自發行價</b>與<b>自首日收盤</b>。<code>超額</code>報酬 = 個股報酬 − 同期指數(SPX/NDX)報酬,指數以 T0 收盤為錨點。註:自發行價基準的超額報酬,其個股端包含首日漲幅。</p>
+    <p><b>價格。</b>採 Yahoo Finance 收盤價(經拆股調整、未經股息調整),與純價格指數(^GSPC、^NDX)一致。發行價來自公司申報文件/新聞稿;直接上市以交易所參考價代替發行價(已標記)。</p>
+    <p><b>顏色分層。</b>顏色強度依報酬幅度遞增(約 2%/15%/40%/100% 為界),為配合 IPO 多年期報酬而調整(綠=正,紅=負)。</p>
+    <p><b>注意事項。</b>未滿一年的 IPO 之 1 年欄位顯示「未滿」,且不納入 1 年彙總。<b>Didi</b>(經 DIDIY 連續序列)保留為關鍵下市/失敗案例(約 −75%)。四檔已下市/私有化名稱(Slack、Squarespace、Confluent、HashiCorp)因無可用歷史價而剔除;由於這些多為溢價收購,剔除會使樣本略偏保守(非偏樂觀)。</p>
+    <p style="color:var(--tx4)">資料截至 ${DATA.asof}。非投資建議。</p></div>`;
+  return `<div class="notes">
+    <p><b>Purpose.</b> A 5-year lookback (2019–2025) on how large US IPOs behave after listing, as behavioural reference for the upcoming SpaceX / Anthropic / OpenAI mega-listings. The focus is pattern: whether the day-1 pop fades, where the drift bottoms, and how the lockup overhang plays out.</p>
+    <p><b>Universe.</b> 67 NYSE/NASDAQ companies. <b>Core</b> = market cap ≥$10B at IPO; plus <b>flagged</b> notable sub-$10B AI/crypto/tech/software names (Reddit, Astera, Circle, Klaviyo, Rubrik, etc.). SPACs / de-SPACs excluded.</p>
+    <p><b>Horizons & returns.</b> Each horizon is the IPO date (T0) + {7,30,91,182,365} calendar days, snapped to the last trading day ≤ target. Returns are shown on two baselines: <b>from offer price</b> and <b>from first-day close</b>. <code>Excess</code> = stock return − the matching index (SPX/NDX) return over the same window, with the index anchored at the T0 close. Note: offer-baseline excess includes the day-1 pop in the stock leg only.</p>
+    <p><b>Prices.</b> Yahoo Finance closes (split-adjusted, dividend-unadjusted), consistent with the price-only indices (^GSPC, ^NDX). Offer prices are from company filings/press; direct listings use the exchange reference price in place of an offer (flagged with *).</p>
+    <p><b>Colour tiers.</b> Intensity scales with return magnitude (breaks at ≈2% / 15% / 40% / 100%), adapted for multi-year IPO returns (green = positive, red = negative).</p>
+    <p><b>Caveats.</b> IPOs younger than a horizon show "pending" and are excluded from 1Y aggregates. <b>Didi</b> (via the continuous DIDIY series) is retained as the key delisting/failure case (~−75%). Four delisted/taken-private names (Slack, Squarespace, Confluent, HashiCorp) are dropped for lack of available history; since those were premium acquisitions, the omission biases the sample mildly <i>conservative</i>, not rosy.</p>
+    <p style="color:var(--tx4)">Data as of ${DATA.asof}. Not investment advice.</p></div>`;
+}
+function openMethod(){
+  document.getElementById('m2').innerHTML=`<div class="mhead"><div class="mtitle"><span style="font-size:15px;font-weight:700">${t('methtitle')}</span></div><button class="x" onclick="closeOv()">×</button></div><div class="mbody">${methodsHTML()}</div>`;
+  document.getElementById('ov2').classList.add('show');
+}
+
+/* ---------------- boot + events ---------------- */
+function renderAll(){applyText();renderControls();renderKPIs();renderHeatmap();renderBarsSector();renderBarsBucket();renderScatter();renderTable();}
+function boot(){
+  document.querySelectorAll('#seg-base button').forEach(b=>b.onclick=()=>{baseline=b.dataset.v;renderAll();});
+  document.querySelectorAll('#seg-metric button').forEach(b=>b.onclick=()=>{metric=b.dataset.v;renderAll();});
+  document.querySelectorAll('#seg-hz button').forEach(b=>b.onclick=()=>{chz=b.dataset.v;renderAll();});
+  document.getElementById('btn-csv').onclick=exportCSV;
+  document.getElementById('t-method').onclick=openMethod;
+  document.getElementById('ov1').onclick=e=>{if(e.target.id==='ov1')closeOv();};
+  document.getElementById('ov2').onclick=e=>{if(e.target.id==='ov2')closeOv();};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOv();});
+  renderAll();
+}
+window.closeOv=closeOv;
+</script>
+</body>
+</html>
