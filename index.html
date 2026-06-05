@@ -90,7 +90,7 @@ h1.title{font-size:21px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
 .pos{color:var(--up)} .neg{color:var(--dn)}
 
 /* ---------- CONTROLS ---------- */
-.controls{position:sticky;top:0;z-index:40;background:rgba(10,14,20,.86);backdrop-filter:blur(10px);
+.controls{position:sticky;top:0;z-index:50;background:rgba(10,14,20,.92);backdrop-filter:blur(12px);
   border:1px solid var(--bd);border-radius:12px;padding:13px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:11px}
 .crow{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .cgroup{display:flex;align-items:center;gap:9px}
@@ -109,6 +109,8 @@ h1.title{font-size:21px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
 .cspacer{flex:1}
 .btn-exp{font-size:11.5px;color:var(--tx2);border:1px solid var(--bd2);border-radius:8px;padding:7px 13px;font-weight:600;transition:.15s;display:flex;gap:6px;align-items:center}
 .btn-exp:hover{border-color:var(--up);color:var(--up)}
+.btn-exp.cpy:hover{border-color:var(--accent);color:var(--accent)}
+.btn-exp.ok{border-color:var(--up);color:var(--up)}
 
 /* ---------- PANELS / GRID ---------- */
 .grid3{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:16px;margin-bottom:18px}
@@ -122,7 +124,7 @@ h1.title{font-size:21px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
 .hm{width:100%;border-collapse:separate;border-spacing:3px}
 .hm th{font-size:10px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:4px 2px;text-align:center}
 .hm th.yr,.hm td.yr{text-align:left;font-family:var(--mono);font-weight:600;color:var(--tx2);font-size:12px;padding-left:4px}
-.hm td{font-family:var(--mono);font-size:12px;font-weight:600;text-align:center;padding:7px 4px;border-radius:6px;color:var(--tx);position:relative;cursor:default}
+.hm td{font-family:var(--mono);font-size:12px;font-weight:600;text-align:center;padding:4px 4px;border-radius:6px;color:var(--tx);position:relative;cursor:default}
 .hm td .n{display:block;font-size:8.5px;color:var(--tx4);font-weight:500;margin-top:1px}
 .hm td.na{color:var(--tx4);background:rgba(255,255,255,.02)!important}
 
@@ -145,7 +147,7 @@ h1.title{font-size:21px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
 .scleg{display:flex;gap:13px;flex-wrap:wrap;font-size:11px;color:var(--tx3);margin-top:8px;align-items:center}
 .scleg .li{display:flex;gap:5px;align-items:center}
 .scleg .sw{width:9px;height:9px;border-radius:50%}
-.sctip{position:fixed;pointer-events:none;background:rgba(8,12,18,.97);border:1px solid var(--bd3);border-radius:8px;padding:8px 11px;font-size:11.5px;z-index:60;box-shadow:var(--sh);display:none;max-width:220px}
+.sctip{position:fixed;pointer-events:none;background:rgba(8,12,18,.97);border:1px solid var(--bd3);border-radius:8px;padding:8px 11px;font-size:11.5px;z-index:70;box-shadow:var(--sh);display:none;max-width:220px}
 .sctip .t{font-weight:700;font-size:12.5px;margin-bottom:3px}
 .sctip .r{font-family:var(--mono);color:var(--tx2);font-size:11px}
 
@@ -157,14 +159,24 @@ h1.title{font-size:21px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
 .tcount{font-size:11px;color:var(--tx3);font-family:var(--mono)}
 .tscroll{overflow-x:auto;max-height:760px;overflow-y:auto}
 table.dt{width:100%;border-collapse:collapse;font-size:12.5px;white-space:nowrap}
-table.dt thead th{position:sticky;top:0;z-index:5;background:#0c1119;color:var(--tx3);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:10px 10px;text-align:right;border-bottom:1px solid var(--bd2);cursor:pointer;user-select:none;transition:.12s}
+table.dt thead th{position:sticky;top:0;z-index:25;background:#0c1119;color:var(--tx3);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:6px 9px;text-align:right;border-bottom:1px solid var(--bd2);cursor:pointer;user-select:none;transition:.12s}
 table.dt thead th:hover{color:var(--tx)}
 table.dt thead th.l{text-align:left}
 table.dt thead th .ar{color:var(--accent);font-size:9px;margin-left:2px}
-table.dt tbody td{padding:8px 10px;text-align:right;border-bottom:1px solid rgba(30,39,51,.6);font-family:var(--mono);font-variant-numeric:tabular-nums}
+table.dt tbody td{padding:4px 8px;text-align:right;border-bottom:1px solid rgba(30,39,51,.55);font-family:var(--mono);font-variant-numeric:tabular-nums}
 table.dt tbody td.l{text-align:left;font-family:var(--sans)}
-table.dt tbody tr{transition:.1s;cursor:pointer}
-table.dt tbody tr:hover{background:rgba(88,166,255,.06)}
+table.dt tbody tr{transition:background .1s;cursor:pointer}
+table.dt tbody tr:hover{background:rgba(88,166,255,.075)}
+table.dt tbody tr:hover td:first-child{box-shadow:inset 2px 0 0 0 var(--accent)}
+table.dt tbody tr.sel{background:rgba(88,166,255,.12)}
+table.dt tbody tr.sel td:first-child{box-shadow:inset 2px 0 0 0 var(--accent2)}
+table.dt thead th.selcol{cursor:default;padding:6px 4px}
+.selcol{width:30px;text-align:center!important}
+td.selcell{text-align:center!important;padding:4px 4px}
+.rowsel,#selall{accent-color:var(--accent);cursor:pointer;width:13px;height:13px;vertical-align:middle;margin:0}
+.namewrap{display:flex;align-items:center;gap:8px;width:188px}
+.namewrap .nm{flex:1 1 auto;min-width:0;max-width:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.namewrap .tag{flex:0 0 auto}
 .tk{font-weight:700;font-family:var(--mono);color:var(--tx)}
 .nm{color:var(--tx2);font-size:11.5px;font-weight:500;max-width:150px;overflow:hidden;text-overflow:ellipsis;display:inline-block;vertical-align:bottom}
 .star{color:var(--gold);font-size:9px;margin-left:3px;vertical-align:top}
@@ -307,6 +319,7 @@ footer .dis{max-width:760px;line-height:1.5}
         </div>
       </div>
       <div class="cspacer"></div>
+      <button class="btn-exp cpy" id="btn-copy">⧉ <span class="cl" id="t-copy">Copy all</span></button>
       <button class="btn-exp" id="btn-csv">↓ <span id="t-csv">Export CSV</span></button>
     </div>
     <div class="crow">
@@ -409,11 +422,11 @@ const I={
   ch:'The precedent gap',
   cp:`SpaceX (~$1.75T), OpenAI (~$500–730B) and Anthropic will list far above any precedent in this set. The largest comp here — <b>Coinbase (~$85B at reference)</b> — is roughly <b>20× smaller</b> than SpaceX, itself set to be the biggest IPO ever. Only the <b>$40B+ "super-cap" cohort (12 names)</b> offers even thin guidance for the very top of the range; below that, the <b>vintage</b> and <b>pop-and-fade</b> patterns are the more reliable read. The class of 2021 is the cautionary base case.`,
   base:'Baseline',foff:'From Offer',ffdc:'From 1st-Day Close',metric:'Metric',raw:'Raw',espx:'Excess vs SPX',endx:'Excess vs NDX',
-  chz:'Chart horizon',csv:'Export CSV',vintage:'Vintage',tier:'Tier',sector:'Sector',size:'Size',struct:'Structure',all:'All',
+  chz:'Chart horizon',csv:'Export CSV',copyAll:'Copy all',copySel:'Copy selected',vintage:'Vintage',tier:'Tier',sector:'Sector',size:'Size',struct:'Structure',all:'All',
   cohort:'Cohort medians by vintage',cohorth:'Median return per IPO class — the core signal',
   psector:'By sector',psectorh:'Median at selected horizon',pbucket:'By IPO size',pbucketh:'Does scale protect you?',
   pscatter:'Day-1 pop vs forward return',pscatterh:'Does the first-day pop predict the fade?',
-  ptable:'All IPOs',hint:'↔ scroll for all horizons · click any row for full detail',
+  ptable:'All IPOs',hint:'↔ Scroll for horizons · tick rows then Copy, or click a row for detail',
   kIpos:'IPOs in sample',kPop:'Median day-1 pop',k1yO:'Median 1Y · from offer',k1yF:'Median 1Y · from 1st-day',kPos:'Positive at 1Y',kBelow:'Below offer today',
   cTk:'Ticker',cNm:'Company',cDt:'IPO date',cSec:'Sector',cStr:'Type',cCap:'Cap $B',cOff:'Offer',cFdc:'1st-day',cPop:'Day-1',cLife:'Since IPO',
   mFrom:'From',price:'Price',exSpx:'Exc. SPX',exNdx:'Exc. NDX',horizon:'Horizon',perf:'Performance across horizons',
@@ -433,11 +446,11 @@ const I={
   ch:'先例缺口',
   cp:`SpaceX(約1.75兆美元)、OpenAI(約5,000–7,300億美元)與 Anthropic 的上市規模將遠超本資料集中的任何先例。此處最大的可比公司 <b>Coinbase(參考價約850億美元)</b> 仍比 SpaceX 小約 <b>20 倍</b>,而 SpaceX 本身可能成為史上最大 IPO。僅 <b>$400億以上的「超大型」組別(12 檔)</b> 能為區間最頂端提供有限參考;其下,<b>年度組別</b> 與 <b>「首日衝高後回落」</b> 型態才是較可靠的判讀依據。2021 年班底是需要警惕的基準情境。`,
   base:'基準',foff:'自發行價',ffdc:'自首日收盤',metric:'指標',raw:'原始',espx:'超額(對SPX)',endx:'超額(對NDX)',
-  chz:'圖表期間',csv:'匯出CSV',vintage:'年度',tier:'分層',sector:'行業',size:'規模',struct:'結構',all:'全部',
+  chz:'圖表期間',csv:'匯出CSV',copyAll:'複製全部',copySel:'複製所選',vintage:'年度',tier:'分層',sector:'行業',size:'規模',struct:'結構',all:'全部',
   cohort:'各年度中位數報酬',cohorth:'各 IPO 年度的中位數報酬 — 核心訊號',
   psector:'按行業',psectorh:'所選期間之中位數',pbucket:'按上市規模',pbucketh:'規模能否提供保護?',
   pscatter:'首日漲幅 vs 後續報酬',pscatterh:'首日衝高能否預測後續回落?',
-  ptable:'全部 IPO',hint:'↔ 左右捲動查看所有期間 · 點擊任一列查看完整細節',
+  ptable:'全部 IPO',hint:'↔ 左右捲動查看期間 · 勾選列後複製,或點擊查看細節',
   kIpos:'樣本 IPO 數',kPop:'首日漲幅中位數',k1yO:'1年報酬中位數 · 自發行價',k1yF:'1年報酬中位數 · 自首日',kPos:'1年正報酬比例',kBelow:'現價低於發行價',
   cTk:'代碼',cNm:'公司',cDt:'上市日',cSec:'行業',cStr:'類型',cCap:'市值$B',cOff:'發行價',cFdc:'首日',cPop:'首日',cLife:'上市以來',
   mFrom:'相對',price:'價格',exSpx:'超額SPX',exNdx:'超額NDX',horizon:'期間',perf:'各期間表現',
@@ -465,6 +478,7 @@ const HZLBL={w1:'1W',m1:'1M',m3:'3M',m6:'6M',y1:'1Y'};
 let baseline='off', metric='raw', chz='y1';
 let fYears=new Set(), fTiers=new Set(), fSector='', fBucket='', fStruct='';
 let sortKey='date', sortDir=-1;
+let selected=new Set(), scState=null;
 
 const yearColor={2019:'#58A6FF',2020:'#10B981',2021:'#F23645',2022:'#F0B429',2023:'#A78BFA',2024:'#34D399',2025:'#FB923C'};
 
@@ -619,11 +633,12 @@ function renderScatter(){
   const svg=document.getElementById('scatter');
   const W=1100,H=360,ml=64,mr=24,mt=20,mb=44;
   const xs=f.map(r=>r.pop), ys=f.map(r=>getRet(r,chz));
-  if(!f.length){svg.innerHTML=`<text x="${W/2}" y="${H/2}" fill="var(--tx4)" font-size="13" text-anchor="middle" font-family="Inter">No data for current filters</text>`;document.getElementById('scleg').innerHTML='';return;}
+  if(!f.length){svg.innerHTML=`<text x="${W/2}" y="${H/2}" fill="var(--tx4)" font-size="13" text-anchor="middle" font-family="Inter">No data for current filters</text>`;document.getElementById('scleg').innerHTML='';svg.onmousemove=null;svg.onmouseleave=null;scState=null;return;}
   let xmin=Math.min(0,...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys);
   const xp=(xmax-xmin)*.06||5,yp=(ymax-ymin)*.08||5;xmin-=xp;xmax+=xp;ymin-=yp;ymax+=yp;
   const sx=v=>ml+(v-xmin)/(xmax-xmin)*(W-ml-mr);
   const sy=v=>H-mb-(v-ymin)/(ymax-ymin)*(H-mt-mb);
+  scState={xmin,xmax,ymin,ymax,ml,mr,mt,mb,W,H};
   let g='';
   // grid + ticks
   for(let i=0;i<=4;i++){const xv=xmin+(xmax-xmin)*i/4;const X=sx(xv);g+=`<line x1="${X}" y1="${mt}" x2="${X}" y2="${H-mb}" stroke="#1a212c" stroke-width="1"/><text x="${X}" y="${H-mb+16}" fill="var(--tx3)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">${xv>0?'+':''}${xv.toFixed(0)}%</text>`;}
@@ -642,7 +657,7 @@ function renderScatter(){
     g+=`<circle cx="${X}" cy="${Y}" r="${mq?6:4.5}" fill="${c}" fill-opacity="${mq?.95:.72}" stroke="${mq?'#fff':c}" stroke-width="${mq?1.3:.5}" stroke-opacity="${mq?.85:.4}" data-tk="${r.ticker}" class="scpt" style="cursor:pointer"/>`;
     if(mq)g+=`<text x="${X+8}" y="${Y+3}" fill="var(--tx2)" font-size="9.5" font-family="JetBrains Mono">${r.ticker}</text>`;
   });
-  svg.innerHTML=g;
+  svg.innerHTML=g+'<g id="xhair"></g>';
   // legend
   const years=[...new Set(f.map(r=>r.year))].sort();
   document.getElementById('scleg').innerHTML=years.map(y=>`<div class="li"><span class="sw" style="background:${yearColor[y]}"></span>${y}</div>`).join('')+`<div class="li" style="margin-left:8px"><span class="sw" style="background:#fff;width:7px;height:7px"></span>${L==='tc'?'重點名稱':'marquee'}</div>`;
@@ -654,6 +669,10 @@ function renderScatter(){
     pt.addEventListener('mouseleave',()=>tip.style.display='none');
     pt.addEventListener('click',()=>openCompany(pt.dataset.tk));
   });
+  // crosshair — property assignment avoids stacking listeners across renders
+  const xhair=document.getElementById('xhair');
+  svg.onmousemove=e=>{const ctm=svg.getScreenCTM();if(!ctm||!scState)return;const q=svg.createSVGPoint();q.x=e.clientX;q.y=e.clientY;const loc=q.matrixTransform(ctm.inverse());const cx=loc.x,cy=loc.y,S=scState;if(cx<S.ml||cx>S.W-S.mr||cy<S.mt||cy>S.H-S.mb){xhair.innerHTML='';return;}const dx=S.xmin+(cx-S.ml)/(S.W-S.ml-S.mr)*(S.xmax-S.xmin);const dy=S.ymin+((S.H-S.mb)-cy)/(S.H-S.mt-S.mb)*(S.ymax-S.ymin);xhair.innerHTML=`<line x1="${cx.toFixed(1)}" y1="${S.mt}" x2="${cx.toFixed(1)}" y2="${S.H-S.mb}" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3" opacity=".8"/><line x1="${S.ml}" y1="${cy.toFixed(1)}" x2="${S.W-S.mr}" y2="${cy.toFixed(1)}" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3" opacity=".8"/><rect x="${(cx-22).toFixed(1)}" y="${S.H-S.mb+3}" width="44" height="14" rx="3" fill="#0a0e14" stroke="#3a4658"/><text x="${cx.toFixed(1)}" y="${S.H-S.mb+13}" fill="#cfe3ff" font-size="9.5" text-anchor="middle" font-family="JetBrains Mono">${dx>0?'+':''}${dx.toFixed(0)}%</text><rect x="${(S.ml-50).toFixed(1)}" y="${(cy-7).toFixed(1)}" width="46" height="14" rx="3" fill="#0a0e14" stroke="#3a4658"/><text x="${(S.ml-27).toFixed(1)}" y="${(cy+3).toFixed(1)}" fill="#cfe3ff" font-size="9.5" text-anchor="middle" font-family="JetBrains Mono">${dy>0?'+':''}${dy.toFixed(0)}%</text>`;};
+  svg.onmouseleave=()=>{if(xhair)xhair.innerHTML='';tip.style.display='none';};
 }
 /* ---------------- table ---------------- */
 function colVal(r,k){
@@ -669,8 +688,8 @@ function renderTable(){
     {k:'sector',l:t('cSec'),cls:'l'},{k:'capB',l:t('cCap')},{k:'offer',l:t('cOff')},{k:'fdc',l:t('cFdc')},
     {k:'pop',l:t('cPop')},...HZ.map(h=>({k:h,l:HZLBL[h]})),{k:'life',l:t('cLife')}
   ];
-  document.getElementById('dthead').innerHTML='<tr>'+cols.map(c=>`<th class="${c.cls||''}" data-k="${c.k}">${c.l}${sortKey===c.k?` <span class="ar">${sortDir>0?'▲':'▼'}</span>`:''}</th>`).join('')+'</tr>';
-  document.querySelectorAll('#dthead th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=(k==='ticker'||k==='name'||k==='sector')?1:-1;}renderTable();});
+  document.getElementById('dthead').innerHTML='<tr><th class="selcol"><input type="checkbox" id="selall" title="Select all"></th>'+cols.map(c=>`<th class="${c.cls||''}" data-k="${c.k}">${c.l}${sortKey===c.k?` <span class="ar">${sortDir>0?'▲':'▼'}</span>`:''}</th>`).join('')+'</tr>';
+  document.querySelectorAll('#dthead th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(!k)return;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=(k==='ticker'||k==='name'||k==='sector')?1:-1;}renderTable();});
   const sorted=[...f].sort((a,b)=>{
     let x=colVal(a,sortKey),y=colVal(b,sortKey);
     if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;
@@ -681,9 +700,10 @@ function renderTable(){
   const stTag=r=>{if(r.status==='Delisted')return `<span class="tag del">${L==='tc'?'下市':'Delisted'}</span>`;if(r.status==='Acquired')return `<span class="tag acq">${L==='tc'?'收購':'Acq'}</span>`;return '';};
   document.getElementById('dtbody').innerHTML=sorted.map(r=>{
     const cells=HZ.map(h=>{const v=getRet(r,h);return `<td class="cell ${tier(v)}">${fmt(v)}</td>`;}).join('');
-    return `<tr data-tk="${r.ticker}">
+    return `<tr data-tk="${r.ticker}" class="${selected.has(r.ticker)?'sel':''}">
+      <td class="selcell"><input type="checkbox" class="rowsel" data-tk="${r.ticker}" ${selected.has(r.ticker)?'checked':''}></td>
       <td class="l"><span class="tk">${r.ticker}</span>${MARQUEE.has(r.ticker)?'<span class="star">★</span>':''}</td>
-      <td class="l"><span class="nm">${r.name}</span> ${stTag(r)}</td>
+      <td class="l"><div class="namewrap"><span class="nm">${r.name}</span>${stTag(r)}</div></td>
       <td class="l mono" style="color:var(--tx3);font-size:11.5px">${r.date}</td>
       <td class="l"><span class="sec">${secName(r.sector)}</span></td>
       <td>${r.capB>=10?r.capB.toFixed(0):r.capB.toFixed(1)}</td>
@@ -695,6 +715,15 @@ function renderTable(){
     </tr>`;
   }).join('');
   document.querySelectorAll('#dtbody tr').forEach(tr=>tr.onclick=()=>openCompany(tr.dataset.tk));
+  // ---- row selection ----
+  const selall=document.getElementById('selall');
+  const updCopy=()=>{const b=document.getElementById('btn-copy');if(!b)return;const n=selected.size;b.querySelector('.cl').textContent=n?`${t('copySel')} (${n})`:t('copyAll');};
+  const syncSelAll=()=>{const fset=f.map(r=>r.ticker);const inSel=fset.filter(tk=>selected.has(tk)).length;selall.checked=inSel>0&&inSel===fset.length;selall.indeterminate=inSel>0&&inSel<fset.length;};
+  document.querySelectorAll('#dtbody .selcell').forEach(td=>td.addEventListener('click',e=>e.stopPropagation()));
+  document.querySelectorAll('#dtbody .rowsel').forEach(cb=>{cb.addEventListener('click',e=>e.stopPropagation());cb.addEventListener('change',()=>{const tk=cb.dataset.tk,tr=cb.closest('tr');if(cb.checked){selected.add(tk);tr.classList.add('sel');}else{selected.delete(tk);tr.classList.remove('sel');}syncSelAll();updCopy();});});
+  selall.onclick=e=>e.stopPropagation();
+  selall.onchange=()=>{const on=selall.checked;f.forEach(r=>{on?selected.add(r.ticker):selected.delete(r.ticker);});document.querySelectorAll('#dtbody tr').forEach(tr=>{const o=selected.has(tr.dataset.tk);tr.classList.toggle('sel',o);const cb=tr.querySelector('.rowsel');if(cb)cb.checked=o;});syncSelAll();updCopy();};
+  syncSelAll();updCopy();
   const mlabel=(baseline==='off'?t('foff'):t('ffdc'))+' · '+(metric==='raw'?t('raw'):metric==='spx'?t('espx'):t('endx'));
   document.getElementById('tcount').innerHTML=`${sorted.length} ${L==='tc'?'檔':'shown'} · <span style="color:var(--tx2)">${mlabel}</span>`;
 }
@@ -713,6 +742,23 @@ function exportCSV(){
   const blob=new Blob([lines.join('\n')],{type:'text/csv'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ipo_performance_${sfx}_${DATA.asof}.csv`;a.click();
 }
+
+/* ---------------- copy to clipboard (TSV) ---------------- */
+function copyTSV(){
+  let rows=filtered();
+  if(selected.size) rows=rows.filter(r=>selected.has(r.ticker));
+  rows=[...rows].sort((a,b)=>{let x=colVal(a,sortKey),y=colVal(b,sortKey);if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;if(typeof x==='string')return x.localeCompare(y)*sortDir;return (x-y)*sortDir;});
+  const sfx=`${baseline}/${metric}`;
+  const head=['Ticker','Name','IPO Date','Year','Sector','Type','Region','Status','Cap $B','Bucket','Offer','1st-day','Day-1 %',...HZ.map(h=>`${HZLBL[h]} % (${sfx})`),`Since IPO % (${baseline})`];
+  const lines=[head.join('\t')];
+  rows.forEach(r=>{const row=[r.ticker,r.name,r.date,r.year,r.sector,r.structure,r.region,r.status,r.capB,r.bucket,r.offer,r.fdc,(r.pop==null?'':r.pop),...HZ.map(h=>{const v=getRet(r,h);return v==null?'':v;}),(lifeVal(r)==null?'':lifeVal(r))];lines.push(row.join('\t'));});
+  const tsv=lines.join('\n');
+  const done=()=>flashCopy(rows.length);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tsv).then(done).catch(()=>fallbackCopy(tsv,done));}
+  else fallbackCopy(tsv,done);
+}
+function fallbackCopy(text,cb){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);cb&&cb();}
+function flashCopy(n){const b=document.getElementById('btn-copy');if(!b)return;const sp=b.querySelector('.cl');const prev=sp.textContent;sp.textContent=(L==='tc'?`已複製 ${n} 列 ✓`:`Copied ${n} rows ✓`);b.classList.add('ok');setTimeout(()=>{sp.textContent=prev;b.classList.remove('ok');},1500);}
 
 /* ---------------- company modal ---------------- */
 function openCompany(tk){
@@ -834,6 +880,7 @@ function boot(){
   document.querySelectorAll('#seg-metric button').forEach(b=>b.onclick=()=>{metric=b.dataset.v;renderAll();});
   document.querySelectorAll('#seg-hz button').forEach(b=>b.onclick=()=>{chz=b.dataset.v;renderAll();});
   document.getElementById('btn-csv').onclick=exportCSV;
+  document.getElementById('btn-copy').onclick=copyTSV;
   document.getElementById('t-method').onclick=openMethod;
   document.getElementById('ov1').onclick=e=>{if(e.target.id==='ov1')closeOv();};
   document.getElementById('ov2').onclick=e=>{if(e.target.id==='ov2')closeOv();};
